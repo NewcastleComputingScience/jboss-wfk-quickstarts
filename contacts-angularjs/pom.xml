@@ -222,6 +222,10 @@
             <artifactId>shrinkwrap-resolver-api-maven</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Finally we declare any frontend dependencies needed, courtesy of webjars.org -->
+
+
     </dependencies>
     <build>
         <!-- Maven will append the version to the finalName (which is the name given to the generated war, and hence the context 
