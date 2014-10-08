@@ -1,3 +1,4 @@
+'use strict';
 /*
  * JBoss, Home of Professional Open Source
  * Copyright 2014, Red Hat, Inc. and/or its affiliates, and individual
@@ -15,7 +16,50 @@
  * limitations under the License.
  */
 // Define the REST resource service, allowing us to interact with it as a high level service
-angular.module('membersService', ['ngResource']).
-    factory('Members', function($resource){
-  return $resource('rest/members/:memberId', {});
-});
+angular.module('contactsServices', ['ngResource']).
+    factory('Contacts',['$resource', function($resource) {
+        //Instantiate the Contacts resource for interacting with the /contacts/ endpoint
+        var contacts = $resource('rest/contacts/:contactId', {contactId: '@id'}, {'update': {method: 'PUT'}});
+        //Extend the $resource to share contacts data locally across controllers
+        contacts.data = {};
+        return contacts;
+    }]).
+    factory('Messages', [function() {
+        //Create the messages array
+        var messages = [];
+
+        //Clear the messages array
+        var clear = function() {
+            console.log("Should be cleared!");
+            messages = [];
+
+        };
+
+        //Add to the messages array
+        var push = function(status, body) {
+            messages.push({
+                status: status,
+                body: body
+            });
+        };
+
+        //Remove a specific message from the messages array
+        var remove = function(message) {
+            //Get the index of the message to be removed
+            var idx = messages.indexOf(message);
+            messages.splice(idx, 1);
+        };
+
+        //Get the messages array
+        var get = function() {
+            return messages;
+        };
+
+        //Expose the Messages API
+        return {
+            clear: clear,
+            push: push,
+            remove: remove,
+            get: get
+        }
+    }]);

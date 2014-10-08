@@ -1,3 +1,4 @@
+'use strict';
 /*
  * JBoss, Home of Professional Open Source
  * Copyright 2014, Red Hat, Inc. and/or its affiliates, and individual
@@ -15,8 +16,9 @@
  * limitations under the License.
  */
 // Define any routes for the app
-// Note that this app is a single page app, and each partial is routed to using the URL fragment. For example, to select the 'home' route, the URL is http://localhost:8080/jboss-contacts-angularjs/#/home
-angular.module('contacts', [ 'ngRoute', 'contactsService' ])
+// Note that this app is a single page app, and each partial is routed to using the URL fragment. For example, to select
+// the 'home' route, the URL is http://localhost:8080/jboss-contacts-angularjs/#/home
+var contacts = angular.module('contacts', [ 'ngRoute', 'contactsServices', 'contactsDirectives'])
     .config( [ '$httpProvider','$routeProvider', function($httpProvider, $routeProvider) {
         /*
          * Use a HTTP interceptor to add a nonce to every request to prevent MSIE from caching responses.
@@ -24,17 +26,29 @@ angular.module('contacts', [ 'ngRoute', 'contactsService' ])
         $httpProvider.interceptors.push('ajaxNonceInterceptor');
 
         $routeProvider.
-        // if URL fragment is /home, then load the home partial, with the ContactsCtrl controller
+        // if URL fragment is /home, then load the home partial, with the HomeCtrl controller
         when('/home', {
-            templateUrl : 'partials/home.html',
-            controller : ContactsCtrl
+            templateUrl: 'partials/home.html',
+            controller: 'HomeCtrl'
+        // if URL fragment is /add, then load the addContact partial, with the ContactsCtrl controller
+        }).when('/add', {
+            templateUrl: 'partials/addContact.html',
+            controller: 'ContactCtrl'
+        // if URL fragment starts /add, then load the editContact partial, passing the non-optional contactId parameter
+        // to the ContactsCtrl controller
+        }).when('/edit/:contactId', {
+            templateUrl: 'partials/editContact.html',
+            controller: 'ContactCtrl'
+        // if URL fragment is /about, then load the about partial
+        }).when('/about', {
+            templateUrl: 'partials/about.html'
         // Add a default route
         }).otherwise({
             redirectTo : '/home'
         });
     } ])
     .factory('ajaxNonceInterceptor', function() {
-        // This interceptor is equivalent to the behavior induced by $.ajaxSetup({cache:false});
+        // This interceptor is equivalent to the behavior induced by jQuery's $.ajaxSetup({cache:false});
 
         var param_start = /\?/;
 
