@@ -15,8 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Define the REST resource service, allowing us to interact with it as a high level service
+//Angular services may injected throughout a codebase and provide access to shared data and functionality
 angular.module('contactsServices', ['ngResource']).
+    //Defines the Contacts REST resource, allowing us to interact with it as an Angular.js service elsewhere in the code
     factory('Contacts',['$resource', function($resource) {
         //Instantiate the Contacts resource for interacting with the /contacts/ endpoint
         var contacts = $resource('rest/contacts/:contactId', {contactId: '@id'}, {'update': {method: 'PUT'}});
@@ -24,15 +25,14 @@ angular.module('contactsServices', ['ngResource']).
         contacts.data = {};
         return contacts;
     }]).
+    //Defines the Messages service, used to share simple objects ({status:'', body:''}) throughout the code
     factory('Messages', [function() {
         //Create the messages array
         var messages = [];
 
         //Clear the messages array
         var clear = function() {
-            console.log("Should be cleared!");
             messages = [];
-
         };
 
         //Add to the messages array

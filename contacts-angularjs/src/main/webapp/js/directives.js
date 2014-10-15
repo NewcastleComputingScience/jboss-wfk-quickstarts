@@ -15,22 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 //Angular directives may be used to define small, reusable pieces of custom html
 angular.module('contactsDirectives', []).
+    //Defines a directive for displaying collections of messages in bootstrap style alerts
     directive('messages', function() {
         return {
             //Restrict the way in which a directive may be used in a partial
             // E = element, A = attribute, C = class, M = comment
             // AE therefore means <div messages></div> OR <messages></messages> would be allowed
-            restrict: 'EA',
+            restrict: 'AE',
             //Declares the scope to which the directive will belong and what will exist within it
             // = indicates two-way binding with the value of the messages property in html
+            // e.g: for $scope.variableName => <div messages="variableName"></div>
             scope: {
                 messages: '='
             },
             //Defines the content that should be output from the directive
             //Can include HTML, data binding expressions, and even other expressions
+            //Provides the html for a collection of alert boxes which: a) contain messages received
+            // from the server; & b) may be closed
             template:
             '<div class="row alert alert-dismissable clearfix alert-{{message.status}}" ng-repeat="message in messages.get()">' +
                 '<p class="pull-left text-left">{{message.body}}</p>' +
