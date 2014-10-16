@@ -21,27 +21,27 @@
  */
 
 //Initialise Angular.js dependency injection and perform other setup
-var injector = angular.injector(['ng', 'contacts']);
-var httpProvider = injector.get('$httpProvider');
-var httpBackend = injector.get('$httpBackend');
-var http = injector.get('$http');
+var injector = angular.injector(['ng', 'ngMock', 'contacts']);
+var $httpProvider = injector.get('$httpProvider');
+var $httpBackend = injector.get('$httpBackend');
+var $http = injector.get('$http');
 
 //Perform per-test setup
 var init = {
-    setup: function() {
-        this.$scope = injector.get('$rootScope').$new();
-    }
+    setup: function() {}
 };
 
 //app.js tests module
-module('app_tests', init);
+QUnit.module('app_tests', init);
 
-test('"ajaxNonceInterceptor" initialised successfully.', function() {
-    ok(httpProvider.interceptors.indexOf('ajaxNonceInterceptor') > -1);
+QUnit.test('"ajaxNonceInterceptor" initialised successfully.', function(assert) {
+    assert.ok($httpProvider.interceptors.indexOf('ajaxNonceInterceptor') > -1);
 });
 
-test('"ajaxNonceInterceptor" functions correctly.', function() {
-    httpBackend.expectGet('/[?&]_=[0-9]+$/').respond(200);
-    http.get('/');
-    httpBackend.flush();
+QUnit.test('"ajaxNonceInterceptor" functions correctly.', function() {
+    $httpBackend.expectGet('/[?&]_=[0-9]+$/').respond(200);
+    $http.get('/');
+    $httpBackend.flush();
 });
+
+//No test to verify routes as testing configuration is inherently circular and Angular.js already tests $routeProvider

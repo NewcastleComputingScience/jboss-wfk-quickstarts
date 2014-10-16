@@ -37,11 +37,11 @@
         </button>
     </div>
     <ul class="contact-list letter-headings">
-        <li class="letter-heading" ng-repeat="(heading, subset) in contactsList">
+        <li class="letter-heading" ng-repeat="(heading, subset) in contactsList | orderBy: heading">
             <p>{{heading}}</p>
             <ul class="contacts">
                 <!-- The list is built using Angular's ng-repeat functionality, iterating over contact objects in contacts -->
-                <li class="contact" ng-repeat="contact in subset">
+                <li class="contact" ng-repeat="contact in subset | orderBy: 'firstName'">
                     <a href="#/edit/{{contact.id}}">{{contact.firstName}} {{contact.lastName}}</a>
                     <div class="contact-details" ng-show="details">
                         <p>
