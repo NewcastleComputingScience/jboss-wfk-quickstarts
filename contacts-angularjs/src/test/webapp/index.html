@@ -24,37 +24,29 @@ the tests for the Angular.js application.
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>HTML5 Test Suite</title>
+    <title>QUnit Test Suite</title>
 
-    <link rel="stylesheet" href="qunit/qunit-1.14.0.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="css/qunit-1.14.0.css" type="text/css" media="screen">
     
     <!-- Libraries -->
-    <script src="../../main/webapp/js/libs/jquery-2.0.3.min.js"></script>
-    <script src="../../main/webapp/js/libs/lodash-2.4.1.min.js"></script>
-    <script src="../../main/webapp/js/libs/jquery.validate-1.12.0.js"></script>
-    <script src="../../main/webapp/js/libs/additional-methods-1.12.0.js"></script>
-    <script src="qunit/qunit-1.14.0.js"></script>
+    <script src="../../main/webapp/js/libs/jquery-2.0.3.js"></script>
+    <script src="../../main/webapp/js/libs/angular.js"></script>
+    <script src="../../main/webapp/js/libs/angular-route.js"></script>
+    <script src="../../main/webapp/js/libs/angular-resource.js"></script>
+    <script src="js/libs/qunit-1.14.0.js"></script>
+    <script src="js/libs/angular-mocks.js"></script>
 
     <!-- The js file to be tested -->
-    <script src="../../main/webapp/js/namespace.js"></script>
-    <script src="../../main/webapp/js/util.js"></script>
-    <script src="../../main/webapp/js/formSetup.js"></script>
+    <script src="../../main/webapp/js/services.js"></script>
+    <script src="../../main/webapp/js/directives.js"></script>
     <script src="../../main/webapp/js/app.js"></script>
-    <script src="../../main/webapp/js/validation.js"></script>
-    <script src="../../main/webapp/js/submissions.js"></script>
+    <script src="../../main/webapp/js/controllers.js"></script>
 
     <!-- The js file that contains the tests -->
-    <script src="test/test.js"></script>
-    <script src="test/app_tests.js"></script>
-    <script src="test/submissions_tests.js"></script>
-    <script src="test/util_tests.js"></script>
-    <script src="test/validation_tests.js"></script>
-
-    <!-- jQuery Mobile Library: it needs to run last. -->
-    <script src="../../main/webapp/js/libs/jquery.mobile-1.4.2.js"></script>
-    
-    <!-- Underscore.js Template for building contacts (simplified for testing) -->
-    <script type="text/template" id="contact-tmpl"><% _.each(contacts, function(contact) { %><div><%=contact.id%></div><% }); %></script>
+    <script src="js/test/setup.js"></script>
+    <script src="js/test/app_tests.js"></script>
+    <script src="js/test/service_tests.js"></script>
+    <script src="js/test/controller_tests.js"></script>
 </head>
 <body>
     <h1 id="qunit-header">HTML5 Test Suite</h1>

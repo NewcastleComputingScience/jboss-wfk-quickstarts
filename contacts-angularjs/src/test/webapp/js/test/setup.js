@@ -1,3 +1,4 @@
+'use strict';
 /*
  * JBoss, Home of Professional Open Source
  * Copyright 2014, Red Hat, Inc. and/or its affiliates, and individual
@@ -16,20 +17,8 @@
  */
 
 /**
- * Unit tests that cover basic functionality.
+ * Unit tests that cover the basic functionality of app.js
  */
-
-module('', {
-    setup: function() {
-        // run before
-    },
-    teardown: function() {
-        // run after
-    }
+contacts.config(function($provide) {
+    $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
 });
-
-//test('', 1, function() {
-//    ok(true,"TODO");
-//});
-
-

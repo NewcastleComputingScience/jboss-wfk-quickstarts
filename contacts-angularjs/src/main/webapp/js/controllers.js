@@ -151,7 +151,7 @@ contacts
             $scope.messages.clear();
 
             //Send the DELETE request
-            $scope.contact.$delete({contactId: $scope.contact.id},
+            $scope.contact.$delete(
                 //Successful query
                 function() {
                     //Find the contact locally and remove it
