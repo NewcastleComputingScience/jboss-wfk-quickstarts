@@ -21,33 +21,21 @@
  */
 
 //Initialise Angular.js dependency injection and perform other setup
-var injector = angular.injector(['ng', 'contactsServices']);
-var messages = injector.get('Messages');
-
-//Simple utility method
-var equal = function(left,right) {
-    for(var property in left)
-    {
-        if(!left[property] === right[property])
-        {
-            return false;
-        }
-    }
-    return true;
-};
+var injector = angular.injector(['ng', 'contactsTests','contactsServices']);
+var Messages = injector.get('Messages');
 
 //Create test data
 var testMessage1 = {status: 200, body: 'Ok'};
 var testMessage2 = {status: 400, body: 'Bad request'};
 
-
 //Perform per-test setup
 var init = {
     setup: function() {
-        messages.push(testMessage1.status, testMessage1.body);
+        Messages.clear();
+        Messages.push(testMessage1.status, testMessage1.body);
     },
     teardown: function() {
-        messages.clear();
+        Messages.clear();
     }
 };
 
@@ -55,24 +43,24 @@ var init = {
 QUnit.module('service_tests', init);
 
 QUnit.test('Can retrieve messages stored', function(assert) {
-    assert.ok(messages.get().length === 1);
-    assert.equal(messages.get()[0], testMessage1);
+    assert.equal(Messages.get().length, 1);
+    assert.deepEqual(Messages.get()[0], testMessage1);
 });
 
 QUnit.test('Can add messages', function(assert) {
-    messages.push(testMessage2.status, testMessage2.body);
-    assert.equal(messages.get().length, 2);
-    assert.equal(messages.get()[1], testMessage2);
+    Messages.push(testMessage2.status, testMessage2.body);
+    assert.equal(Messages.get().length, 2);
+    assert.deepEqual(Messages.get()[1], testMessage2);
 });
 
 QUnit.test('Can remove messages', function(assert) {
-    messages.remove(testMessage1);
-    assert.equal(messages.get().length, 0);
+    Messages.remove(testMessage1);
+    assert.equal(Messages.get().length, 0);
 });
 
 QUnit.test('Can clear multiple messages', function(assert) {
-    messages.push(testMessage2.status, testMessage2.body);
-    assert.equal(messages.get().length, 2);
-    messages.clear();
-    assert.equal(messages.get().length, 0);
+    Messages.push(testMessage2.status, testMessage2.body);
+    assert.equal(Messages.get().length, 2);
+    Messages.clear();
+    assert.equal(Messages.get().length, 0);
 });

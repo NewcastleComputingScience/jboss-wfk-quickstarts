@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 contacts
-    .controller('HomeCtrl', ['$scope', '$filter', 'Contacts', 'Messages',
-        function($scope, $filter, Contacts, Messages) {
-        //Assign contacts service to $scope variable
-        $scope.contacts = Contacts;
-        //Assign messages service to $scope variable
+    .controller('HomeCtrl', ['$scope', '$filter', 'Contact', 'Messages',
+        function($scope, $filter, Contact, Messages) {
+        //Assign Contact service to $scope variable
+        $scope.contacts = Contact;
+        //Assign Messages service to $scope variable
         $scope.messages = Messages;
 
         //Divide contact list into several sub lists according to the first character of their firstName property
@@ -69,17 +69,17 @@ contacts
             $scope.contactsList = getHeadings($filter('filter')($scope.contacts.data, $scope.search));
         });
     }])
-    .controller('ContactCtrl', ['$scope', '$routeParams', '$location', 'Contacts', 'Messages',
-        function ($scope, $routeParams, $location, Contacts, Messages) {
-        //Assign contacts service to $scope variable
-        $scope.contacts = Contacts;
-        //Assign messages service to $scope variable
+    .controller('ContactCtrl', ['$scope', '$routeParams', '$location', 'Contact', 'Messages',
+        function ($scope, $routeParams, $location, Contact, Messages) {
+        //Assign Contact service to $scope variable
+        $scope.contacts = Contact;
+        //Assign Messages service to $scope variable
         $scope.messages = Messages;
 
         //Get today's date for the birthDate form value max
         $scope.date = Date.now();
 
-        //Get the contact with the id :contactId if set.
+        //Get the Contact object with the id :contactId if set.
         $scope.contact = ($routeParams.hasOwnProperty('contactId'))?$scope.contacts.get({contactId: $routeParams.contactId}):{};
 
         // Define a reset function, that clears the prototype new Contact object, and
@@ -130,7 +130,6 @@ contacts
         // and displays any error messages
         $scope.saveContact = function() {
             $scope.messages.clear();
-
             $scope.contact.$update(
                 //Successful query
                 function(data) {
@@ -154,6 +153,7 @@ contacts
             $scope.contact.$delete(
                 //Successful query
                 function() {
+                    //TODO: Fix the wonky imitation of a cache by replacing with a proper cacheFactory cache.
                     //Find the contact locally and remove it
                     var idx = $scope.contacts.data.indexOf($scope.contact);
                     $scope.contacts.data.splice(idx, 1);

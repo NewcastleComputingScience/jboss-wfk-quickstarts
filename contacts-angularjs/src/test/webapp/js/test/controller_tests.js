@@ -20,62 +20,72 @@
  * Unit tests that cover the basic functionality of controllers.js
  */
 
-var injector = angular.injector(['ng', 'ngMock', 'contacts', 'contactsServices']);
-var messages = injector.get('Messages');
-var contacts = injector.get('Contacts');
+var injector = angular.injector(['ng', 'contactsTests', 'contacts', 'contactsServices']);
+var Messages = injector.get('Messages');
+var Contact = injector.get('Contact');
 var $controller = injector.get('$controller');
 var $filter = injector.get('$filter');
-var $httpBackend = injector.get('$httpBackend');
 var $location = injector.get('$location');
+var testData = [
+    {"id":10002,"firstName":"Davey","lastName":"Jones","email":"davey.jones@locker.com",
+        "phoneNumber":"(212)555-3333","birthDate":"1996-08-07"},
+    {"id":10001,"firstName":"John","lastName":"Smith","email":"john.smith@mailinator.com",
+        "phoneNumber":"(212) 555-1212","birthDate":"1963-06-03"}
+];
 
 
 //Test HomeCtrl controller
 var initHomeCtrl = {
     setup: function() {
         this.$scope = injector.get('$rootScope').$new();
+
+        this.testData = JSON.parse(JSON.stringify(testData));
         this.testContacts = [
-            {"id":10002,"firstName":"Davey","lastName":"Jones","email":"davey.jones@locker.com",
-                "phoneNumber":"(212)555-3333","birthDate":"1996-08-07"},
-            {"id":10001,"firstName":"John","lastName":"Smith","email":"john.smith@mailinator.com",
-                "phoneNumber":"(212) 555-1212","birthDate":"1963-06-03"}
+            new Contact(this.testData[0]),
+            new Contact(this.testData[1])
         ];
-        $httpBackend.expectGET('/contacts').respond(200, this.testContacts);
+        this.$httpBackend = injector.get('$httpBackend');
+        this.$httpBackend.expectGET(/rest\/contacts[?&]_=[0-9]+$/).respond(200, this.testContacts);
         $controller('HomeCtrl', {
             $scope: this.$scope,
             $filter: $filter,
-            Contacts: contacts,
-            Messages: messages
+            Contact: Contact,
+            Messages: Messages
         });
-        $httpBackend.flush();
+        this.$httpBackend.flush();
     }
 };
 
 QUnit.module('controller_tests for HomeCtrl', initHomeCtrl);
 
 QUnit.test('"HomeCtrl" initialised successfully', function(assert) {
-    assert.equal(this.$scope.contacts.data, this.testContacts, "The Contacts data is requested upon HomeCtrl init.");
+    assert.deepEqual(this.$scope.contacts.data, this.testContacts, "The Contacts data is requested upon HomeCtrl init.");
     assert.ok(angular.isFunction(this.$scope.messages.get), "The Messages service has been injected successfully.");
 });
 
 QUnit.test('"HomeCtrl" dynamically generates contact list heads correctly', function(assert) {
-    assert.equal(this.$scope.contactsList, ['D', 'J']);
+    assert.deepEqual(this.$scope.contactsList, {'D':[this.testContacts[0]], 'J':[this.testContacts[1]]});
 });
 
 QUnit.test('"HomeCtrl" search filter works correctly', function(assert) {
     this.$scope.search = "D";
-    assert.equal(this.$scope.contactsList.length, 1);
-    assert.equal(this.$scope.contactsList[0], this.testContacts[0]);
+    this.$scope.$digest();
+    assert.ok(!this.$scope.contactsList.hasOwnProperty('J'));
+    this.$scope.search = "Dd";
+    this.$scope.$digest();
+    assert.ok(!this.$scope.contactsList.hasOwnProperty('D'));
 });
 
 var initContactCtrl = {
     setup: function() {
         this.$scope = injector.get('$rootScope').$new();
+        this.testData = JSON.parse(JSON.stringify(testData));
         this.testContacts = [
-            {"id":10002,"firstName":"Davey","lastName":"Jones","email":"davey.jones@locker.com",
-                "phoneNumber":"(212)555-3333","birthDate":"1996-08-07"},
-            {"id":10001,"firstName":"John","lastName":"Smith","email":"john.smith@mailinator.com",
-                "phoneNumber":"(212) 555-1212","birthDate":"1963-06-03"}
+            new Contact(this.testData[0]),
+            new Contact(this.testData[1])
         ];
+        Contact.data = this.testContacts;
+        this.$httpBackend = injector.get('$httpBackend');
     }
 };
 
@@ -86,66 +96,80 @@ QUnit.test('"ContactCtrl" initialised successfully', function(assert) {
         $scope: this.$scope,
         $routeParams: {},
         $location: $location,
-        Contacts: contacts,
-        Messages: messages
+        Contacts: Contact,
+        Messages: Messages
     });
     assert.ok(angular.isFunction(this.$scope.messages.get), "The Messages service has been injected successfully.");
 });
 
 QUnit.test('"ContactCtrl" correctly attempts to create a Contact.', function(assert) {
-    $httpBackend.expectPOST('/contacts', this.testContacts[0]).respond(409);
+    expect(1);
+    delete this.testData[0].id;
+    this.$httpBackend.expectPOST('rest/contacts', this.testData[0]).respond(409, 'Conflict');
     $controller('ContactCtrl', {
         $scope: this.$scope,
         $routeParams: {},
         $location: $location,
         Contacts: contacts,
-        Messages: messages
+        Messages: Messages
     });
-    this.$scope.contact.save(this.testContacts[0], function(data){
+    this.$scope.contacts.save(null, this.testData[0], null, function(data){
         assert.equal(data.status, 409);
     });
-    $httpBackend.flush();
+    this.$httpBackend.flush();
 });
 
 QUnit.test('"ContactCtrl" correctly handles routeParams and requests the appropriate Contact.', function(assert) {
-    $httpBackend.expectGET('/contacts/10001').respond(200, this.testContacts[1]);
+    this.$httpBackend.expectGET(/rest\/contacts\/10001[?&]_=[0-9]+$/).respond(200, this.testData[1]);
     $controller('ContactCtrl', {
         $scope: this.$scope,
         $routeParams: {contactId: 10001},
         $location: $location,
-        Contacts: contacts,
-        Messages: messages
+        Contacts: Contact,
+        Messages: Messages
     });
-    $httpBackend.flush();
-    assert.equal(this.$scope.contact, this.testContacts[1]);
+    this.$httpBackend.flush();
+    //Work around for the properties Angular adds to objects produced by the $resource factory
+    var loadedContact = this.$scope.contact;
+    delete loadedContact.$promise;
+    delete loadedContact.$resolved;
+    assert.deepEqual(loadedContact, this.testContacts[1]);
 });
 
 QUnit.test('"ContactCtrl" correctly attempts to update a specified Contact.', function(assert) {
-    $httpBackend.expectPUT('/contacts/10001').respond(200);
+    expect(1);
+    this.$httpBackend.expectGET(/rest\/contacts\/10001[?&]_=[0-9]+$/).respond(200, this.testData[1]);
     $controller('ContactCtrl', {
         $scope: this.$scope,
         $routeParams: {contactId: 10001},
         $location: $location,
-        Contacts: contacts,
-        Messages: messages
+        Contact: Contact,
+        Messages: Messages
     });
-    this.$scope.contact.$update(function(data){
-        assert.equal(data.status, 200);
-    });
-    $httpBackend.flush();
+    this.$httpBackend.flush();
+    this.$httpBackend.resetExpectations();
+    this.$scope.contact.firstName = this.testData[1].firstName = 'Jack';
+    this.$scope.contact.email = this.testData[1].email = 'jack.smith@mailinator.com';
+    this.$httpBackend.expectPUT('rest/contacts/10001', this.testData[1]).respond(200);
+    this.$scope.saveContact();
+    this.$httpBackend.flush();
+    assert.equal(this.$scope.contacts.data[1].firstName, 'Jack');
 });
 
 QUnit.test('"ContactCtrl" correctly attempts to delete a specified Contact.', function(assert) {
-    $httpBackend.expectDELETE('/contacts/10001').respond(204);
+    expect(1);
+    this.$httpBackend.expectGET(/rest\/contacts\/10001[?&]_=[0-9]+$/).respond(200, this.testData[1]);
     $controller('ContactCtrl', {
         $scope: this.$scope,
         $routeParams: {contactId: 10001},
         $location: $location,
-        Contacts: contacts,
-        Messages: messages
+        Contacts: Contact,
+        Messages: Messages
     });
-    this.$scope.contact.$delete(function(data){
-        assert.equal(data.status, 204);
-    });
-    $httpBackend.flush();
+    this.$httpBackend.flush();
+    this.$httpBackend.resetExpectations();
+    this.$httpBackend.expectDELETE('rest/contacts/10001').respond(204);
+    this.$scope.deleteContact();
+    this.$httpBackend.flush();
+    assert.equal(this.$scope.contacts.data.length, 1);
 });

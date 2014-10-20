@@ -18,12 +18,12 @@
 //Angular services may injected throughout a codebase and provide access to shared data and functionality
 angular.module('contactsServices', ['ngResource']).
     //Defines the Contacts REST resource, allowing us to interact with it as an Angular.js service elsewhere in the code
-    factory('Contacts',['$resource', function($resource) {
+    factory('Contact',['$resource', function($resource) {
         //Instantiate the Contacts resource for interacting with the /contacts/ endpoint
-        var contacts = $resource('rest/contacts/:contactId', {contactId: '@id'}, {'update': {method: 'PUT'}});
+        var Contact = $resource('rest/contacts/:contactId', {contactId: '@id'}, {'update': {method: 'PUT'}});
         //Extend the $resource to share contacts data locally across controllers
-        contacts.data = {};
-        return contacts;
+        Contact.data = [];
+        return Contact;
     }]).
     //Defines the Messages service, used to share simple objects ({status:'', body:''}) throughout the code
     factory('Messages', [function() {

@@ -17,8 +17,12 @@
  */
 
 /**
- * Unit tests that cover the basic functionality of app.js
+ * Setup code for unit tests
  */
-contacts.config(function($provide) {
+//Some Angular services may only be injected during the config phase.
+var httpProvider;
+var contactsTests = angular.module('contactsTests', ['ngMock']);
+contactsTests.config(['$provide', '$httpProvider', function($provide, $httpProvider) {
     $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
-});
+    httpProvider = $httpProvider;
+}]);
