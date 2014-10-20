@@ -21,7 +21,7 @@
  */
 
 //Initialise Angular.js dependency injection and perform other setup
-var injector = angular.injector(['ng', 'contactsTests','contactsServices']);
+var injector = angular.injector(['ng', 'contacts']);
 var Messages = injector.get('Messages');
 
 //Create test data

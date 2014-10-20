@@ -14,10 +14,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<!-- This is a partial, and is templated by AngularJS -->
+<!-- This is an Angular.js template -->
 
 <!-- Status messages to be displayed -->
-<div messages="messages"></div>
+<div rh-message-bag messages="messages"></div>
 
 <!-- This form is used to add new Contact entries. Upon loading all fields are empty. -->
 <form name="contactForm" role="form" id="contactForm">
@@ -109,20 +109,8 @@
         </p>
     </div>
 
-    <div class="form-group clearfix">
-        <div class="btn-group pull-right">
-            <!-- ng-disable conditionally applies the special attribute 'disabled'. -->
-            <!-- When clicked, execute $scope.addContact() function. -->
-            <button class="btn btn-primary" ng-disabled="contactForm.$invalid" ng-click="addContact()">
-                <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Create
-            </button>
-            <!-- When clicked, execute $scope.reset(). -->
-            <button class="btn btn-default" ng-click="reset()">
-                <span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Clear
-            </button>
-            <a href="#/home" class="btn btn-default">
-                <span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Cancel
-            </a>
-        </div>
-    </div>
+    <!-- Load the appropriate form controls depending on whether the variable $scope.create is truthy -->
+    <div ng-if="create" ng-include="'templates/contact/addControls.html'"></div>
+    <div ng-if="!create" ng-include="'templates/contact/editControls.html'"></div>
+
 </form>

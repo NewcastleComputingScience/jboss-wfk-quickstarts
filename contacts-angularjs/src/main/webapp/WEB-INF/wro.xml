@@ -20,19 +20,22 @@
         xsi:schemaLocation="http://www.isdc.ro/wro wro.xsd">
 
     <group name="app.min">
-        <js>/js/app.js</js>
+        <js>/js/app.module.js</js>
+        <js>/js/controllers.js</js>
+        <js>/js/directives.js</js>
+
     </group>
 
-    <group name="formSetup.min">
-        <js>/js/formSetup.js</js>
+    <group name="controllers.min">
+        <js>/js/controllers.js</js>
     </group>
 
-    <group name="namespace.min">
-        <js>/js/namespace.js</js>
+    <group name="directives.min">
+        <js>/js/directives.js</js>
     </group>
 
-    <group name="submissions.min">
-        <js>/js/submissions.js</js>
+    <group name="services.min">
+        <js>/js/services.js</js>
     </group>
 
     <group name="theming.min">

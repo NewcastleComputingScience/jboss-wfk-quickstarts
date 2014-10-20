@@ -15,7 +15,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<html lang="en" ng-app="contacts">
+<html lang="en" data-ng-app="app">
     <head>
         <title>Contacts</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,24 +23,23 @@
         <meta name="format-detection" content="telephone=no" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <!-- Load base CSS for Bootstrap 3.2 -->
-        <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
-        <!--<link rel="stylesheet" href="css/bootstrap-theme.css" type="text/css" />-->
+        <link rel="stylesheet" href="resources/css/libs/bootstrap.css" type="text/css" />
         <!-- Load custom CSS for page -->
-        <link rel="stylesheet" href="css/main.css" type="text/css" />
+        <link rel="stylesheet" href="resources/css/main.css" type="text/css" />
     </head>
     <body>
         <div class="container">
             <div class="header">
                 <ul class="nav nav-pills pull-right">
-                    <li class="active"><a ng-href="#">Home</a></li>
-                    <li><a ng-href="#/add">Add Contact</a></li>
-                    <li><a ng-href="#/about">About</a></li>
+                    <li class="active"><a href="#/">Home</a></li>
+                    <li><a href="#/add">Add Contact</a></li>
+                    <li><a href="#/about">About</a></li>
                 </ul>
-                <h3><img src="gfx/rhjb_eap_logo.png" alt=""></h3>
+                <h3><img src="resources/gfx/rhjb_eap_logo.png" alt=""></h3>
             </div>
 
-            <div ng-view="">
-                <!-- Angular.js partials will be loaded here. -->
+            <div data-ng-view>
+                <!-- Angular.js templates will be loaded here. -->
             </div>
 
             <div class="footer">
@@ -50,24 +49,30 @@
         <!-- Load Javascript at the end of the page for performance -->
 
         <!-- Load jQuery -->
-        <script src="js/libs/jquery-2.0.3.js"></script>
-        <!-- Load Bootstrap JS components -->
-        <script src="js/libs/bootstrap.js"></script>
+        <script src="libs/jquery-2.0.3.js"></script>
 
         <!-- Load angularjs -->
-        <script src="js/libs/angular.js"></script>
-        <!-- Load angularjs-route, which allows us to use multiple views displayed through application routes -->
-        <script src="js/libs/angular-route.js"></script>
-        <!-- Load angularjs-resource, which allows us to interact with REST resources as high level services -->
-        <script src="js/libs/angular-resource.js"></script>
+        <script src="libs/angular.js"></script>
+        <!-- Load angularjs-route, allows us to specify different combinations of templates and controllers for urls -->
+        <script src="libs/angular-route.js"></script>
+        <!-- Load angularjs-resource, which allows us to easily interact with RESTful resources -->
+        <script src="libs/angular-resource.js"></script>
 
-        <!-- Load the services we have defined for our application, particularly the REST services -->
-        <script src="js/services.js"></script>
-        <!-- Load the directives we have defined for our application -->
-        <script src="js/directives.js"></script>
-        <!-- Load the application wide JS, such as route definitions -->
-        <script src="js/app.js"></script>
-        <!-- Load the controllers we have defined for our application -->
-        <script src="js/controllers.js"></script>
+        <!-- Load the top level application module definition, routes & controller -->
+        <script src="app/app.module.js"></script>
+        <script src="app/app.route.js"></script>
+        <script src="app/app.controller.js"></script>
+        <!-- Load the contact module, resource, controller & directive  -->
+        <script src="app/contact/contact.module.js"></script>
+        <script src="app/contact/contact.js"></script>
+        <script src="app/contact/contact.controller.js"></script>
+        <!-- Load the utils module, services & directives -->
+        <script src="app/util/util.module.js"></script>
+        <script src="app/util/ajaxNonceInterceptor.service.js"></script>
+        <script src="app/util/messageBag.service.js"></script>
+        <script src="app/util/messageBag.directive.js"></script>
+
+
+
     </body>
 </html>

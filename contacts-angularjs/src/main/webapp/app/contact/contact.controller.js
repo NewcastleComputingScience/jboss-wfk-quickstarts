@@ -1,4 +1,3 @@
-'use strict';
 /*
  * JBoss, Home of Professional Open Source
  * Copyright 2014, Red Hat, Inc. and/or its affiliates, and individual
@@ -15,72 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-contacts
-    .controller('HomeCtrl', ['$scope', '$filter', 'Contact', 'Messages',
-        function($scope, $filter, Contact, Messages) {
+(function() {
+    'use strict';
+    angular
+        .module('app.contact')
+        .controller('ContactController', ContactController);
+
+    ContactController.$inject = ['$scope', '$routeParams', '$location', 'Contact', 'messageBag'];
+
+    function ContactController($scope, $routeParams, $location, Contact, messageBag) {
         //Assign Contact service to $scope variable
         $scope.contacts = Contact;
-        //Assign Messages service to $scope variable
-        $scope.messages = Messages;
-
-        //Divide contact list into several sub lists according to the first character of their firstName property
-        var getHeadings = function(contacts) {
-            var headings = {};
-            for(var i = 0; i<contacts.length; i++) {
-                //Get the first letter of a contact's firstName
-                var startsWithLetter = contacts[i].firstName.charAt(0).toUpperCase();
-                //If we have encountered that first letter before then add the contact to that list, else create it
-                if(headings.hasOwnProperty(startsWithLetter)) {
-                    headings[startsWithLetter].push(contacts[i]);
-                } else {
-                    headings[startsWithLetter] = [contacts[i]];
-                }
-            }
-            return headings;
-        };
-
-        //Upon initial loading of the controller, populate a list of Contacts and their letter headings
-       $scope.contacts.data = $scope.contacts.query(
-            //Successful query
-            function(data) {
-                $scope.contacts.data = data;
-                $scope.contactsList = getHeadings($scope.contacts.data);
-                //Keep the contacts list headings in sync with the underlying contacts
-                $scope.$watchCollection('contacts.data', function(newContacts, oldContacts) {
-                    $scope.contactsList = getHeadings(newContacts);
-                });
-            },
-            //Error
-            function(result) {
-                for(var error in result.data){
-                    $scope.messages.push('danger', result.data[error]);
-                }
-            }
-        );
-
-        //Boolean flag representing whether the details of the contacts are expanded inline
-        $scope.details = false;
-
-        //Default search string
-        $scope.search = "";
-
-        //Continuously filter the content of the contacts list according to the contents of $scope.search
-        $scope.$watch('search', function(newValue, oldValue) {
-            $scope.contactsList = getHeadings($filter('filter')($scope.contacts.data, $scope.search));
-        });
-    }])
-    .controller('ContactCtrl', ['$scope', '$routeParams', '$location', 'Contact', 'Messages',
-        function ($scope, $routeParams, $location, Contact, Messages) {
-        //Assign Contact service to $scope variable
-        $scope.contacts = Contact;
-        //Assign Messages service to $scope variable
-        $scope.messages = Messages;
+        //Assign messageBag service to $scope variable
+        $scope.messages = messageBag;
 
         //Get today's date for the birthDate form value max
         $scope.date = Date.now();
 
-        //Get the Contact object with the id :contactId if set.
-        $scope.contact = ($routeParams.hasOwnProperty('contactId'))?$scope.contacts.get({contactId: $routeParams.contactId}):{};
+        $scope.contact = {};
+        $scope.create = true;
+
+        //If $routeParams has :contactId then load the specified contact, and display edit controls on contactForm
+        if($routeParams.hasOwnProperty('contactId')) {
+            $scope.contact = $scope.contacts.get({contactId: $routeParams.contactId});
+            $scope.create = false;
+        }
+
 
         // Define a reset function, that clears the prototype new Contact object, and
         // consequently, the form
@@ -116,7 +75,7 @@ contacts
 
                     //Add success message
                     $scope.messages.push('success', 'Contact added');
-                //Error
+                    //Error
                 }, function(result) {
                     for(var error in result.data){
                         $scope.messages.push('danger', result.data[error]);
@@ -135,7 +94,7 @@ contacts
                 function(data) {
                     //Add success message
                     $scope.messages.push('success', 'Contact saved');
-                //Error
+                    //Error
                 }, function(result) {
                     for(var error in result.data){
                         $scope.messages.push('danger', result.data[error]);
@@ -161,7 +120,7 @@ contacts
                     $scope.messages.push('success', 'Contact removed');
                     //Redirect back to /home
                     $location.path('/home');
-                //Error
+                    //Error
                 }, function(result) {
                     for(var error in result.data){
                         $scope.messages.push('danger', result.data[error]);
@@ -170,4 +129,5 @@ contacts
             );
 
         };
-    }]);
+    }
+})();

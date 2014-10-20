@@ -26,27 +26,37 @@ the tests for the Angular.js application.
     <meta charset="UTF-8" />
     <title>QUnit Test Suite</title>
 
-    <link rel="stylesheet" href="css/qunit-1.14.0.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="resources/css/qunit-1.14.0.css" type="text/css" media="screen">
     
     <!-- Libraries -->
-    <script src="../../main/webapp/js/libs/jquery-2.0.3.js"></script>
-    <script src="../../main/webapp/js/libs/angular.js"></script>
-    <script src="../../main/webapp/js/libs/angular-route.js"></script>
-    <script src="../../main/webapp/js/libs/angular-resource.js"></script>
-    <script src="js/libs/qunit-1.14.0.js"></script>
-    <script src="js/libs/angular-mocks.js"></script>
+    <script src="../../main/webapp/libs/jquery-2.0.3.js"></script>
+    <script src="../../main/webapp/libs/angular.js"></script>
+    <script src="../../main/webapp/libs/angular-route.js"></script>
+    <script src="../../main/webapp/libs/angular-resource.js"></script>
+    <script src="libs/qunit-1.14.0.js"></script>
+    <script src="libs/angular-mocks.js"></script>
 
     <!-- The js file to be tested -->
-    <script src="../../main/webapp/js/services.js"></script>
-    <script src="../../main/webapp/js/directives.js"></script>
-    <script src="../../main/webapp/js/app.js"></script>
-    <script src="../../main/webapp/js/controllers.js"></script>
+    <script src="../../main/webapp/app/app.module.js"></script>
+    <script src="../../main/webapp/app/app.route.js"></script>
+    <script src="../../main/webapp/app/app.controller.js"></script>
+    <script src="../../main/webapp/app/contact/contact.module.js"></script>
+    <script src="../../main/webapp/app/contact/contact.js"></script>
+    <script src="../../main/webapp/app/contact/contact.controller.js"></script>
+    <script src="../../main/webapp/app/util/util.module.js"></script>
+    <script src="../../main/webapp/app/util/ajaxNonceInterceptor.service.js"></script>
+    <script src="../../main/webapp/app/util/messageBag.service.js"></script>
+    <script src="../../main/webapp/app/util/messageBag.directive.js"></script>
 
+    <!-- Testing setup -->
+    <script src="test/specs.module.js"></script>
     <!-- The js file that contains the tests -->
-    <script src="js/test/setup.js"></script>
-    <script src="js/test/app_tests.js"></script>
-    <script src="js/test/service_tests.js"></script>
-    <script src="js/test/controller_tests.js"></script>
+    <script src="test/app.controller.spec.js"></script>
+    <script src="test/contact/contact.controller.spec.js"></script>
+    <script src="test/contact/contact.service.spec.js"></script>
+    <script src="test/util/messageBag.service.spec.js"></script>
+    <script src="test/util/messageBag.directive.spec.js"></script>
+    <script src="test/util/ajaxNonceInterceptor.service.spec.js"></script>
 </head>
 <body>
     <h1 id="qunit-header">HTML5 Test Suite</h1>

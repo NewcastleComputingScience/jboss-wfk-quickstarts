@@ -1,4 +1,3 @@
-'use strict';
 /*
  * JBoss, Home of Professional Open Source
  * Copyright 2014, Red Hat, Inc. and/or its affiliates, and individual
@@ -15,18 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//Angular directives may be used to define small, reusable pieces of custom html
-angular.module('contactsDirectives', []).
-    //Defines a directive for displaying collections of messages in bootstrap style alerts
-    directive('messages', function() {
-        return {
+(function() {
+    'use strict';
+    /**
+     * @desc messageBag directive that is used to display the contents of a messageBag service object
+     * @example <div rh-message-bag messages="..."></div>
+     */
+    angular
+        .module('app.contact')
+        .directive('rhMessageBag', messageBag);
+
+    function messageBag() {
+        //Angular directives may be used to define small, reusable pieces of custom html
+        var directive = {
             //Restrict the way in which a directive may be used in a partial
             // E = element, A = attribute, C = class, M = comment
-            // AE therefore means <div messages></div> OR <messages></messages> would be allowed
+            // AE therefore means <div rh-messageBag></div> OR <rh-messageBag></rh-messageBag> would be allowed
             restrict: 'AE',
             //Declares the scope to which the directive will belong and what will exist within it
             // = indicates two-way binding with the value of the messages property in html
-            // e.g: for $scope.variableName => <div messages="variableName"></div>
+            // e.g: for $scope.variableName => <div rh-messageBag messages="variableName"></div>
             scope: {
                 messages: '='
             },
@@ -34,15 +41,16 @@ angular.module('contactsDirectives', []).
             //Can include HTML, data binding expressions, and even other expressions
             //Provides the html for a collection of alert boxes which: a) contain messages received
             // from the server; & b) may be closed
-            template:
-            '<div class="row alert alert-dismissable clearfix alert-{{message.status}}" ng-repeat="message in messages.get()">' +
-                '<p class="pull-left text-left">{{message.body}}</p>' +
-                '<button type="button" class="close pull-right" ng-click="messages.remove(message)">' +
-                    '<span aria-hidden="true">x</span>' +
-                    '<span class="sr-only">Close</span>' +
-                '</button>' +
-            '</div>',
-            //Used for Manipulating the template after it has been rendered
-            link: function($scope, element, attrs) {}
-        }
-    });
+            templateUrl: 'templates/util/messageBag.directive.html',
+            //Specified function is used for manipulating the template DOM after it has been rendered
+            link: linkFunc
+        };
+
+        return directive;
+
+        ////////////////
+
+        function linkFunc() {}
+
+    }
+})();

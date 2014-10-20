@@ -1,4 +1,3 @@
-'use strict';
 /*
  * JBoss, Home of Professional Open Source
  * Copyright 2014, Red Hat, Inc. and/or its affiliates, and individual
@@ -15,28 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//Angular services may injected throughout a codebase and provide access to shared data and functionality
-angular.module('contactsServices', ['ngResource']).
-    //Defines the Contacts REST resource, allowing us to interact with it as an Angular.js service elsewhere in the code
-    factory('Contact',['$resource', function($resource) {
-        //Instantiate the Contacts resource for interacting with the /contacts/ endpoint
-        var Contact = $resource('rest/contacts/:contactId', {contactId: '@id'}, {'update': {method: 'PUT'}});
-        //Extend the $resource to share contacts data locally across controllers
-        Contact.data = [];
-        return Contact;
-    }]).
-    //Defines the Messages service, used to share simple objects ({status:'', body:''}) throughout the code
-    factory('Messages', [function() {
+(function() {
+    'use strict';
+    angular
+        .module('app.util')
+        //Defines the messageBag service, used to share simple objects ({status:'', body:''}) throughout the code
+        .factory('messageBag', messageBag);
+
+    //messages factory function, gets invoked upon load
+    function messageBag() {
         //Create the messages array
         var messages = [];
 
+        //Declare the messageBag service API
+        var service =  {
+            clear: clear,
+            push: push,
+            remove: remove,
+            get: get
+        };
+
+        return service;
+
+        //////////////
+
         //Clear the messages array
-        var clear = function() {
+        function clear() {
             messages = [];
         };
 
         //Add to the messages array
-        var push = function(status, body) {
+        function push(status, body) {
             messages.push({
                 status: status,
                 body: body
@@ -44,22 +52,15 @@ angular.module('contactsServices', ['ngResource']).
         };
 
         //Remove a specific message from the messages array
-        var remove = function(message) {
+        function remove(message) {
             //Get the index of the message to be removed
             var idx = messages.indexOf(message);
             messages.splice(idx, 1);
         };
 
         //Get the messages array
-        var get = function() {
+        function get() {
             return messages;
         };
-
-        //Expose the Messages API
-        return {
-            clear: clear,
-            push: push,
-            remove: remove,
-            get: get
-        }
-    }]);
+    }
+})();
