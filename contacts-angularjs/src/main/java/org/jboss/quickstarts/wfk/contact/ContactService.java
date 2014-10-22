@@ -25,18 +25,18 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * This Service assumes the Control responsibility in the ECB pattern. 
- * 
+ * This Service assumes the Control responsibility in the ECB pattern.
+ * <p>
  * The validation is done here so that it may be used by other Boundary Resources.  Other Business Logic would go here
  * as well. 
- * 
- * There are no access modifiers on the methods making them 'package' scope.  They should only be accessed by a 
+ * <p>
+ * There are no access modifiers on the methods, making them 'package' scope.  They should only be accessed by a
  * Boundary / Web Service class with public methods. 
  * 
  * @author Joshua Wilson
- *
  */
-// The @Dependent is the default scope is listed here so that you know what scope is being used.
+
+//@Dependent annotation designates the default scope, listed here so that you know what scope is being used.
 @Dependent
 public class ContactService {
 
@@ -50,9 +50,9 @@ public class ContactService {
     private ContactRepository crud;
     
     /**
-     * Find all the Contacts and sort them alphabetically by last name.
+     * Returns a List of all persisted {@link Contact} objects, sorted alphabetically by last name.
      * 
-     * @return List of Contacts
+     * @return  List of Contact objects
      */
     List<Contact> findAllOrderedByName() {
         List<Contact> contacts = crud.findAllOrderedByName();
@@ -60,10 +60,10 @@ public class ContactService {
     }
 
     /**
-     * Find just one Contact by it's ID.
+     * Returns a single Contact object, specified by a Long id.
      * 
-     * @param id
-     * @return Contact
+     * @param id The id field of the Contact to be returned
+     * @return The Contact with the specified id
      */
     Contact findById(Long id) {
         Contact contact = crud.findById(id);
@@ -71,10 +71,12 @@ public class ContactService {
     }
 
     /**
-     * Find just one Contact by the email that is passed in. If there is more then one, only the first will be returned.
+     * Returns a single Contact object, specified by a String email.
+     * <p>
+     * If there is more than one Contact with the specified email, only the first encountered will be returned.
      * 
-     * @param email
-     * @return Contact
+     * @param email The email field of the Contact to be returned
+     * @return The first Contact with the specified email
      */
     Contact findByEmail(String email) {
         Contact contact = crud.findByEmail(email);
@@ -82,10 +84,12 @@ public class ContactService {
     }
 
     /**
-     * Find just one Contact by the first name that is passed in. If there is more then one, only the first will be returned.
+     * Returns a single Contact object, specified by a String firstName.
+     * <p>
+     * If there is more then one, only the first will be returned.
      * 
-     * @param firstName
-     * @return Contact
+     * @param firstName The firstName field of the Contact to be returned
+     * @return The first Contact with the specified firstName
      */
     Contact findByFirstName(String firstName) {
         Contact contact = crud.findByFirstName(firstName);
@@ -93,10 +97,12 @@ public class ContactService {
     }
 
     /**
-     * Find just one Contact by the last name that is passed in. If there is more then one, only the first will be returned.
+     * Returns a single Contact object, specified by a String lastName.
+     * <p>
+     * If there is more then one, only the first will be returned.
      * 
-     * @param lastName
-     * @return Contact
+     * @param lastName The lastName field of the Contact to be returned
+     * @return The first Contact with the specified lastName
      */
     Contact findByLastName(String lastName) {
         Contact contact = crud.findByFirstName(lastName);
@@ -104,12 +110,12 @@ public class ContactService {
     }
 
     /**
-     * Create a Contact and store it in the database.
+     * Creates a Contact object and persists it in the application database.
+     * <p>
+     * Validates the data in the Contact object using a {@link ContactValidator} object.
      * 
-     * Validate the data in the Contact.
-     * 
-     * @param Contact
-     * @return Contact
+     * @param contact The Contact object to be persisted using a {@link ContactRepository} object
+     * @return The Contact object that has been successfully persisted to the application database
      * @throws ConstraintViolationException, ValidationException, Exception
      */
     Contact create(Contact contact) throws ConstraintViolationException, ValidationException, Exception {
@@ -125,15 +131,14 @@ public class ContactService {
     }
 
     /**
-     * Update a Contact in the database.
+     * Updates an existing Contact object in the application database.
+     * <p>
+     * Validates the data in the Contact object using a ContactValidator object.
      * 
-     * Validate the data in the Contact.
-     * 
-     * @param Contact
-     * @return Contact
+     * @param contact The Contact object to be passed as an update to the application database
+     * @return The Contact object that has been successfully updated in the application database
      * @throws ConstraintViolationException, ValidationException, Exception
      */
-//    Map<String, Object> update(Contact contact) throws Exception {
     Contact update(Contact contact) throws ConstraintViolationException, ValidationException, Exception {
         log.info("ContactService.update() - Updating " + contact.getFirstName() + " " + contact.getLastName());
         
@@ -147,13 +152,12 @@ public class ContactService {
     }
 
     /**
-     * Delete a Contact in the database.
+     * Deletes an existing Contact in the application database.
      * 
-     * @param Contact
-     * @return Contact
+     * @param contact The Contact object to be removed from the application database
+     * @return The Contact object that has been successfully removed from the application database; or null
      * @throws Exception
      */
-//    Map<String, Object> delete(Contact contact) throws Exception {
     Contact delete(Contact contact) throws Exception {
         log.info("ContactService.delete() - Deleting " + contact.getFirstName() + " " + contact.getLastName());
         
