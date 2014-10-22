@@ -92,6 +92,9 @@
             $scope.contact.$update(
                 //Successful query
                 function(data) {
+                    //Find the contact locally by id and update it
+                    var idx = _.findIndex($scope.contacts.data, {'id': $scope.contact.id});
+                    $scope.contacts.data[idx] = data;
                     //Add success message
                     $scope.messages.push('success', 'Contact saved');
                     //Error
@@ -112,9 +115,9 @@
             $scope.contact.$delete(
                 //Successful query
                 function() {
-                    //TODO: Fix the wonky imitation of a cache by replacing with a proper cacheFactory cache.
-                    //Find the contact locally and remove it
-                    var idx = $scope.contacts.data.indexOf($scope.contact);
+                    //TODO: Fix the wonky imitation of a cache by replacing with a proper $cacheFactory cache.
+                    //Find the contact locally by id and remove it
+                    var idx = _.findIndex($scope.contacts.data, {'id': $scope.contact.id});
                     $scope.contacts.data.splice(idx, 1);
                     //Mark success on the editContact form
                     $scope.messages.push('success', 'Contact removed');

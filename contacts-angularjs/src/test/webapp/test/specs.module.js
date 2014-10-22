@@ -1,4 +1,3 @@
-'use strict';
 /*
  * JBoss, Home of Professional Open Source
  * Copyright 2014, Red Hat, Inc. and/or its affiliates, and individual
@@ -15,14 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+(function() {
+    'use strict';
+    //Top level definition for app.specs testing sub-module.
+    angular
+        .module('app.specs', [
+            'ngMock'
+        ])
+        .config(config);
 
-/**
- * Setup code for unit tests
- */
-//Some Angular services may only be injected during the config phase.
-var httpProvider;
-var contactsTests = angular.module('contactsTests', ['ngMock']);
-contactsTests.config(['$provide', '$httpProvider', function($provide, $httpProvider) {
-    $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
-    httpProvider = $httpProvider;
-}]);
+    config.$inject = ['$provide'];
+
+    //Configuration function
+    function config($provide) {
+        //Some Angular services may only be injected during the config phase.
+        $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
+    }
+
+})();

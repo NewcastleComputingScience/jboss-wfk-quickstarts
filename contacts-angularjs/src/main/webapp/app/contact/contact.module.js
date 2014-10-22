@@ -19,6 +19,7 @@
     //Top level definition for app.contact sub-module.
     angular
         .module('app.contact', [
-            'ngResource'
+            'ngResource',
+            'app.util'
         ]);
 })();

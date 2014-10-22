@@ -333,7 +333,7 @@
                     <plugin>
                         <groupId>ro.isdc.wro4j</groupId>
                         <artifactId>wro4j-maven-plugin</artifactId>
-                        <version>1.4.4</version>
+                        <version>${version.ro.isdc.wro4j}</version>
                         <executions>
                             <execution>
                                 <phase>compile</phase>
