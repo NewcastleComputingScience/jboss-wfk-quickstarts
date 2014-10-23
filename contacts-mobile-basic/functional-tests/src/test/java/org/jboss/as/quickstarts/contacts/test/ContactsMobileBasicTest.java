@@ -92,8 +92,6 @@ public class ContactsMobileBasicTest {
     private static String EMAIL_C = "doe.jane@newmail.com";
     private static String DATE = "1970-01-01";
     private static String DATE_INVALID = "19aaa";
-    private static String DATE_TOO_OLD = "1700-02-04";
-    private static String DATE_FUTURE = "2020-01-01";
 
 
     /**
@@ -137,15 +135,7 @@ public class ContactsMobileBasicTest {
         assertFalse(contactPage.isBirthDateValid());
         contactPage.submit(false);
 
-        contactPage.fillContact(new Contact(FIRST_NAME_A + " " + LAST_NAME, PHONE_NUMBER_A, EMAIL_A, DATE_TOO_OLD));
-        assertTrue(contactPage.isFirstNameValid());
-        assertTrue(contactPage.isLastNameValid());
-        assertTrue(contactPage.isPhoneNumberValid());
-        assertTrue(contactPage.isEmailValid());
-        assertFalse(contactPage.isBirthDateValid());
-        contactPage.submit(false);
-
-        contactPage.fillContact(new Contact(FIRST_NAME_A + " " + LAST_NAME, PHONE_NUMBER_A, EMAIL_A, DATE_FUTURE));
+        contactPage.fillContact(new Contact(FIRST_NAME_A + " " + LAST_NAME, PHONE_NUMBER_A, EMAIL_A, DATE_INVALID));
         assertTrue(contactPage.isFirstNameValid());
         assertTrue(contactPage.isLastNameValid());
         assertTrue(contactPage.isPhoneNumberValid());

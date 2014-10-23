@@ -51,8 +51,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * <p>A suite of tests, run with {@link org.jboss.arquillian Arquillian} to test the JAX-RS endpoints for
- * Contact creation functionality.<p/>
+ * <p>A suite of tests, run with {@link org.jboss.arquillian Arquillian} to test the JAX-RS endpoint for
+ * Contact creation functionality
+ * (see {@link ContactRESTService#createContact(Contact) createContact(Contact)}).<p/>
  *
  * 
  * @author balunasj

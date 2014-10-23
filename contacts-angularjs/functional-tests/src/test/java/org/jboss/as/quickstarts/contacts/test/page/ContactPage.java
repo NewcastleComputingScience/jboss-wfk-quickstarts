@@ -87,7 +87,7 @@ public class ContactPage {
     @FindByJQuery("p[id='email-format'].help-block")
     private WebElement emailFormatValidationMessage;
 
-    @FindByJQuery("p[id='birthdate-required'].help-block")
+    @FindByJQuery("p[id='birthDate-required'].help-block")
     private WebElement birthDateRequiredValidationMessage;
 
     @FindByJQuery("p[id='birthdate-future'].help-block")

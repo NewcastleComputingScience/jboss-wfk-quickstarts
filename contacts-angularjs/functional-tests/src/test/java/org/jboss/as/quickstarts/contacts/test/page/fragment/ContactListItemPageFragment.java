@@ -37,16 +37,17 @@ public class ContactListItemPageFragment {
     @Drone
     private WebDriver browser;
 
-    @FindByJQuery("a[href*='#/edit']")
+    @FindByJQuery("a[href*='#/edit/']")
     private WebElement name;
 
-    @FindByJQuery("div.contact-details p:nth-child(1) strong")
+    @FindByJQuery(".contact-details p:nth-child(1) strong")
     private WebElement email;
 
-    @FindByJQuery("div.contact-details p:nth-child(2)")
+    @FindByJQuery(".contact-details p:nth-child(2)")
     private WebElement phoneNumber;
 
-    @FindByJQuery("div.contact-details p:nth-child(3)")
+    @FindByJQuery(".contact-details p:nth-child(3)")
+
     private WebElement birthDate;
 
     public Contact getContact() {

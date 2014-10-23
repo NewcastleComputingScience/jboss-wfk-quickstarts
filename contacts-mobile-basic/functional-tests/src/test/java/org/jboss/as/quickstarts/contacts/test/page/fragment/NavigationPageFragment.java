@@ -22,40 +22,20 @@ import org.openqa.selenium.WebElement;
 import static org.jboss.arquillian.graphene.Graphene.waitGui;
 
 /**
- * Page fragment for controlling navigation panel
+ * Page fragment for controlling navigation
  *
  * @author Oliver Kiss
  */
 public class NavigationPageFragment {
 
-    @FindByJQuery("[id*='page-menu-button']")
-    private WebElement showMenuButton;
-
-    @FindByJQuery(".ui-panel-open a[href*='contacts-add-page']")
+    @FindByJQuery(".header ul.nav li a[href*='#/add']")
     private WebElement addPageLink;
 
-    @FindByJQuery(".ui-panel-open a[href*='contacts-list-page']")
-    private WebElement listPageLink;
-
-    @FindByJQuery(".ui-panel-open a[href*='contacts-detail-list-page']")
-    private WebElement detailedlistPageLink;
+    @FindByJQuery("#contactForm")
+    private WebElement contactForm;
 
     public void openAddPage() {
-        openPage(addPageLink);
-    }
-
-    public void openListPage() {
-        openPage(listPageLink);
-    }
-
-    public void openDetailedListPage() {
-        openPage(detailedlistPageLink);
-    }
-
-    private void openPage(WebElement link) {
-        showMenuButton.click();
-        waitGui().until().element(link).is().present();
-        link.click();
-        waitGui().until().element(link).is().not().present();
+        addPageLink.click();
+        waitGui().until().element(contactForm).is().present();
     }
 }
