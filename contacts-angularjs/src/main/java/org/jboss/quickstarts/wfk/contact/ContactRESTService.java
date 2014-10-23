@@ -40,18 +40,22 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.WebApplicationException;
 
 /**
- * JAX-RS Example
- * <p/>
- * This class produces a RESTful service to read/write the contents of the contacts table.
+ * <p>This class exposes the functionality of {@link ContactService} over HTTP endpoints as a RESTful resource via
+ * JAX-RS.</p>
+ *
+ * <p>Full path for accessing the Contact resource is rest/contacts .</p>
+ *
+ * <p>The resource accepts and produces JSON.</p>
  * 
  * @author Joshua Wilson
- *
+ * @see ContactService
+ * @see javax.ws.rs.core.Response
  */
 /*
  * The Path annotation defines this as a REST Web Service using JAX-RS.
  * 
  * By placing the Consumes and Produces annotations at the class level the methods all default to JSON.  However, they 
- * can be overriden by adding the Consumes or Produces annotations to the individual method.
+ * can be overridden by adding the Consumes or Produces annotations to the individual method.
  * 
  * It is Stateless to "inform the container that this RESTful web service should also be treated as an EJB and allow 
  * transaction demarcation when accessing the database." - Antonio Goncalves
@@ -69,9 +73,9 @@ public class ContactRESTService {
     private ContactService service;
     
     /**
-     * Search for and return all the Contacts.  They are sorted alphabetically by name.
+     * <p>Search for and return all the Contacts.  They are sorted alphabetically by name.</p>
      * 
-     * @return List of Contacts
+     * @return A Response containing a list of Contacts
      */
     @GET
     public Response retrieveAllContacts() {
@@ -83,9 +87,10 @@ public class ContactRESTService {
     }
 
     /**
-     * Search for and return all the Contacts.  They are sorted alphabetically by name.
-     * 
-     * @return List of Contacts
+     * <p>Search for and return a Contact identified by email address.<p/>
+     *
+     * @param email The string parameter value provided as a Contact's email
+     * @return A Response containing a single Contact
      */
     @GET
     @Path("/{email}")
@@ -98,10 +103,10 @@ public class ContactRESTService {
     }
     
     /**
-     * Search for just one Contact by it's ID.
+     * <p>Search for and return a Contact identified by id.</p>
      * 
-     * @param ID of the Contact
-     * @return Response
+     * @param id The long parameter value provided as a Contact's id
+     * @return A Response containing a single Contact
      */
     @GET
     @Path("/{id:[0-9][0-9]*}")
@@ -117,11 +122,11 @@ public class ContactRESTService {
     }
 
     /**
-     * Creates a new contact from the values provided. Performs validation and will return a JAX-RS response with either 200 (ok)
-     * or with a map of fields, and related errors.
+     * <p>Creates a new contact from the values provided. Performs validation and will return a JAX-RS response with either 200 (ok)
+     * or with a map of fields, and related errors.</p>
      * 
-     * @param Contact
-     * @return Response
+     * @param contact The Contact object, constructed automatically from JSON input, to be <i>created</i> via {@link ContactService#create(Contact)}
+     * @return A Response indicating the outcome of the create operation
      */
     @SuppressWarnings("unused")
     @POST
@@ -165,11 +170,12 @@ public class ContactRESTService {
     }
 
     /**
-     * Updates a contact with the ID provided in the Contact. Performs validation, and will return a JAX-RS response with either 200 ok,
-     * or with a map of fields, and related errors.
+     * <p>Updates a contact with the ID provided in the Contact. Performs validation, and will return a JAX-RS response with either 200 ok,
+     * or with a map of fields, and related errors.</p>
      * 
-     * @param Contact
-     * @return Response
+     * @param contact The Contact object, constructed automatically from JSON input, to be <i>updated</i> via {@link ContactService#update(Contact)}
+     * @param id The long parameter value provided as the id of the Contact to be updated
+     * @return A Response indicating the outcome of the create operation
      */
     @PUT
     @Path("/{id:[0-9][0-9]*}")
@@ -225,11 +231,12 @@ public class ContactRESTService {
     }
 
     /**
-     * Deletes a contact using the ID provided. If the ID is not present then nothing can be deleted, and will return a 
-     * JAX-RS response with either 200 OK or with a map of fields, and related errors.
+     * <p>Deletes a contact using the ID provided. If the ID is not present then nothing can be deleted.</p>
+     *
+     * <p>Will return a JAX-RS response with either 200 OK or with a map of fields, and related errors.</p>
      * 
-     * @param Contact
-     * @return Response
+     * @param id The Long parameter value provided as the id of the Contact to be deleted
+     * @return A Response indicating the outcome of the delete operation
      */
     @DELETE
     @Path("/{id:[0-9][0-9]*}")
@@ -261,11 +268,11 @@ public class ContactRESTService {
     }
     
     /**
-     * Creates a JAX-RS "Bad Request" response including a map of all violation fields, and their message. This can be used
-     * by clients to show violations.
+     * <p>Creates a JAX-RS "Bad Request" response including a map of all violation fields, and their message. This can be used
+     * by calling client applications to display violations to users.<p/>
      * 
-     * @param violations A set of violations that needs to be reported
-     * @return JAX-RS response containing all violations
+     * @param violations A Set of violations that need to be reported in the Response body
+     * @return A Bad Request (400) Response containing all violation messages
      */
     private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations) {
         log.fine("Validation completed. violations found: " + violations.size());

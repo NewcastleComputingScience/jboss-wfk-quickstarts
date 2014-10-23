@@ -29,11 +29,15 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * This is a Repository and connects the Service/Control layer with the Domain/Entity Object.  There are no access modifiers
- * on the methods making them 'package' scope.  They should only be accessed by a Service/Control object. 
+ * <p>This is a Repository class and connects the Service/Control layer (see {@link ContactService} with the
+ * Domain/Entity Object (see {@link Contact}).<p/>
+ *
+ * <p>There are no access modifiers on the methods making them 'package' scope.  They should only be accessed by a
+ * Service/Control object.<p/>
  * 
  * @author Joshua Wilson
- *
+ * @see Contact
+ * @see javax.persistence.EntityManager
  */
 public class ContactRepository {
 
@@ -44,9 +48,9 @@ public class ContactRepository {
     private EntityManager em;
     
     /**
-     * Find all the Contacts and sort them alphabetically by last name.
+     * <p>Returns a List of all persisted {@link Contact} objects, sorted alphabetically by last name.</p>
      * 
-     * @return List of Contacts
+     * @return List of Contact objects
      */
     List<Contact> findAllOrderedByName() {
         TypedQuery<Contact> query = em.createNamedQuery(Contact.FIND_ALL, Contact.class); 
@@ -55,20 +59,22 @@ public class ContactRepository {
     }
 
     /**
-     * Find just one Contact by it's ID.
-     * 
-     * @param id
-     * @return Contact
+     * <p>Returns a single Contact object, specified by a Long id.<p/>
+     *
+     * @param id The id field of the Contact to be returned
+     * @return The Contact with the specified id
      */
     Contact findById(Long id) {
         return em.find(Contact.class, id);
     }
 
     /**
-     * Find just one Contact by the email that is passed in. If there is more then one, only the first will be returned.
-     * 
-     * @param email
-     * @return Contact
+     * <p>Returns a single Contact object, specified by a String email.</p>
+     *
+     * <p>If there is more than one Contact with the specified email, only the first encountered will be returned.<p/>
+     *
+     * @param email The email field of the Contact to be returned
+     * @return The first Contact with the specified email
      */
     Contact findByEmail(String email) {
         TypedQuery<Contact> query = em.createNamedQuery(Contact.FIND_BY_EMAIL, Contact.class).setParameter("email", email); 
@@ -77,10 +83,12 @@ public class ContactRepository {
     }
 
     /**
-     * Find just one Contact by the first name that is passed in. If there is more then one, only the first will be returned.
-     * 
-     * @param firstName
-     * @return Contact
+     * <p>Returns a single Contact object, specified by a String firstName.<p/>
+     *
+     * <p>If there is more then one, only the first will be returned.<p/>
+     *
+     * @param firstName The firstName field of the Contact to be returned
+     * @return The first Contact with the specified firstName
      */
     Contact findByFirstName(String firstName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -93,10 +101,12 @@ public class ContactRepository {
     }
 
     /**
-     * Find just one Contact by the last name that is passed in. If there is more then one, only the first will be returned.
-     * 
-     * @param lastName
-     * @return Contact
+     * <p>Returns a single Contact object, specified by a String lastName.<p/>
+     *
+     * <p>If there is more then one, only the first will be returned.<p/>
+     *
+     * @param lastName The lastName field of the Contact to be returned
+     * @return The first Contact with the specified lastName
      */
     Contact findByLastName(String lastName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -109,15 +119,15 @@ public class ContactRepository {
     }
 
     /**
-     * Create a Contact and store it in the database.
-     * 
-     * Persist takes an entity instance, adds it to the context and makes that instance managed (ie future updates 
-     * to the entity will be tracked)
-     * 
-     * persist() will set the @GeneratedValue @Id for an object. 
-     * 
-     * @param Contact
-     * @return Contact
+     * <p>Persists the provided Contact object to the application database using the EntityManager.</p>
+     *
+     * <p>{@link javax.persistence.EntityManager#persist(Object) persist(Object)} takes an entity instance, adds it to the
+     * context and makes that instance managed (ie future updates to the entity will be tracked)</p>
+     *
+     * <p>persist(Object) will set the @GeneratedValue @Id for an object.</p>
+     *
+     * @param contact The Contact object to be persisted
+     * @return The Contact object that has been persisted
      * @throws ConstraintViolationException, ValidationException, Exception
      */
     Contact create(Contact contact) throws ConstraintViolationException, ValidationException, Exception {
@@ -130,16 +140,16 @@ public class ContactRepository {
     }
 
     /**
-     * Update a Contact in the database.
+     * <p>Updates an existing Contact object in the application database with the provided Contact object.</p>
      * 
-     * Merge creates a new instance of your entity, copies the state from the supplied entity, and makes the new 
-     * copy managed. The instance you pass in will not be managed (any changes you make will not be part of the 
-     * transaction - unless you call merge again).
+     * <p>{@link javax.persistence.EntityManager#merge(Object) merge(Object)} creates a new instance of your entity,
+     * copies the state from the supplied entity, and makes the new copy managed. The instance you pass in will not be
+     * managed (any changes you make will not be part of the transaction - unless you call merge again).</p>
      * 
-     * merge() however must have an object with the @Id already generated.
+     * <p>merge(Object) however must have an object with the @Id already generated.</p>
      * 
-     * @param Contact
-     * @return Contact
+     * @param contact The Contact object to be merged with an existing Contact
+     * @return The Contact that has been merged
      * @throws ConstraintViolationException, ValidationException, Exception
      */
 //    Map<String, Object> update(Contact contact) throws Exception {
@@ -153,13 +163,12 @@ public class ContactRepository {
     }
 
     /**
-     * Delete a Contact in the database.
-     * 
-     * @param Contact
-     * @return Contact
+     * <p>Deletes the provided Contact object from the application database if found there</p>
+     *
+     * @param contact The Contact object to be removed from the application database
+     * @return The Contact object that has been successfully removed from the application database; or null
      * @throws Exception
      */
-//    Map<String, Object> delete(Contact contact) throws Exception {
     Contact delete(Contact contact) throws Exception {
         log.info("ContactRepository.delete() - Deleting " + contact.getFirstName() + " " + contact.getLastName());
         

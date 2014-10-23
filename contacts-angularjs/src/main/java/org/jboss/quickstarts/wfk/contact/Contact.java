@@ -40,10 +40,13 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * This is a Domain Object.   
+ * This is a the Domain object. The Contact class represents how contact resources are represented in the application
+ * database.
+ * <p>
+ * The class also specifies how a contacts are retrieved from the database (with @NamedQueries), and acceptable values
+ * for Contact fields (with @NotNull, @Pattern etc...)
  * 
  * @author Joshua Wilson
- *
  */
 /*
  * The @NamedQueries included here are for searching against the table that reflects this object.  This is the most efficient

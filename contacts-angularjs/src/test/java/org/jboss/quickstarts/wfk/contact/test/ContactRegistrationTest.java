@@ -51,14 +51,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Uses Arquilian to test the JAX-RS processing class for contact registration.
+ * <p>A suite of tests, run with {@link org.jboss.arquillian Arquillian} to test the JAX-RS endpoints for
+ * Contact creation functionality.<p/>
+ *
  * 
  * @author balunasj
  * @author Joshua Wilson
+ * @see ContactRESTService
  */
 @RunWith(Arquillian.class)
 public class ContactRegistrationTest {
-    
+
+    /*
+     * Many of the comments in the code below contain code for use with JAX-RS 2.0 for demonstration purposes.
+     * If you are not using JAX-RS 2.0 then these comments may be ignored.
+     */
+
     @Deployment
     public static Archive<?> createTestArchive() {
 //        File[] libs = Maven.resolver().loadPomFromFile("pom.xml").resolve(

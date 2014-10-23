@@ -24,16 +24,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans
+ * <p>This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans.</p>
+ *
+ * <p>Example injection on a managed bean field:<p/>
  * 
- * <p>
- * Example injection on a managed bean field:
- * </p>
- * 
- * <pre>
+ * <code>
  * &#064;Inject
  * private EntityManager em;
- * </pre>
+ * </code>
+ *
+ * @author Joshua Wilson
+ *
  */
 public class Resources {
 

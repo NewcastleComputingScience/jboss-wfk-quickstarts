@@ -34,17 +34,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
- * <p>
- * This filter wraps qualified requests for JSON content with that standard JSONP padding. This makes these calls accessible
- * cross-domain using standard JSONP approaches.
- * </p>
- * <p>
- * To qualify for wrapping the request must be made to the <i>/rest/*</i> path, and contain a query parameter call
- * <i>jsoncallback</> that defines the JSONP callback method to use with the response.
- * </p>
+ * <p>This filter wraps qualified requests for JSON content with that standard JSONP padding. This makes these calls
+ * accessible cross-domain using standard JSONP approaches.</p>
+ *
+ * <p>To qualify for wrapping the request must be made to the <i>/rest/*</i> path, and contain a query parameter call
+ * <i>jsoncallback<i/> that defines the JSONP callback method to use with the response.</p>
  * 
  * @author balunasj
- * 
+ * @see javax.servlet.Filter
  */
 @WebFilter("/rest/*")
 public class JSONPRequestFilter implements Filter {

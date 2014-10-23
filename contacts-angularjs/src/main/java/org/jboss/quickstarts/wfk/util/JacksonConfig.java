@@ -27,10 +27,10 @@ import javax.ws.rs.ext.Provider;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
- * This is a config class that effects the Jackson library used to translate the data over the REST endpoint.
+ * <p>This Config class provides custom configuration settings to the Jackson library used to parse and produce JSON</p>
  * 
  * @author Joshua Wilson, Vineet Reynolds
- *
+ * @see org.codehaus.jackson
  */
 @Provider
 @Produces(MediaType.APPLICATION_JSON)

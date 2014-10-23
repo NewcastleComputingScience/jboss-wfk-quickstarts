@@ -27,12 +27,12 @@ import javax.validation.ValidationException;
 import javax.validation.Validator;
 
 /**
- * JAX-RS Example
- * <p/>
- * This class produces a RESTful service to read/write the contents of the contacts table.
+ * <p>This class provides methods to check Contact objects against arbitrary requirements.</p>
  * 
  * @author Joshua Wilson
- *
+ * @see Contact
+ * @see ContactRepository
+ * @see javax.validation.Validator
  */
 public class ContactValidator {
     @Inject
@@ -42,16 +42,15 @@ public class ContactValidator {
     private ContactRepository crud;
 
     /**
-     * <p>
-     * Validates the given Contact variable and throws validation exceptions based on the type of error. If the error is standard
-     * bean validation errors then it will throw a ConstraintValidationException with the set of the constraints violated.
-     * </p>
-     * <p>
-     * If the error is caused because an existing contact with the same email is registered it throws a regular validation
-     * exception so that it can be interpreted separately.
-     * </p>
+     * <p>Validates the given Contact object and throws validation exceptions based on the type of error. If the error is standard
+     * bean validation errors then it will throw a ConstraintValidationException with the set of the constraints violated.<p/>
+     *
+     *
+     * <p>If the error is caused because an existing contact with the same email is registered it throws a regular validation
+     * exception so that it can be interpreted separately.</p>
+     *
      * 
-     * @param contact Contact to be validated
+     * @param contact The Contact object to be validated
      * @throws ConstraintViolationException If Bean Validation errors exist
      * @throws ValidationException If contact with the same email already exists
      */
@@ -70,15 +69,15 @@ public class ContactValidator {
     }
 
     /**
-     * Checks if a contact with the same email address is already registered. This is the only way to easily capture the
-     * "@UniqueConstraint(columnNames = "email")" constraint from the Contact class.
+     * <p>Checks if a contact with the same email address is already registered. This is the only way to easily capture the
+     * "@UniqueConstraint(columnNames = "email")" constraint from the Contact class.</p>
      * 
-     * Since Update will being using an email that is already in the database we need to make sure that it is the email
-     * from the record being updated.  
+     * <p>Since Update will being using an email that is already in the database we need to make sure that it is the email
+     * from the record being updated.</p>
      * 
-     * @param email The email to check
-     * @param id 
-     * @return True if the email already exists, and false otherwise
+     * @param email The email to check is unique
+     * @param id The user id to check the email against if it was found
+     * @return boolean which represents whether the email was found, and if so if it belongs to the user with id
      */
     boolean emailAlreadyExists(String email, Long id) {
         Contact contact = null;
