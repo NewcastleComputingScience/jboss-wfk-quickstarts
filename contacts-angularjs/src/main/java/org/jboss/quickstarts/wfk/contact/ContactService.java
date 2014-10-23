@@ -57,8 +57,7 @@ public class ContactService {
      * @return List of Contact objects
      */
     List<Contact> findAllOrderedByName() {
-        List<Contact> contacts = crud.findAllOrderedByName();
-        return contacts;
+        return crud.findAllOrderedByName();
     }
 
     /**
@@ -68,8 +67,7 @@ public class ContactService {
      * @return The Contact with the specified id
      */
     Contact findById(Long id) {
-        Contact contact = crud.findById(id);
-        return contact;
+        return crud.findById(id);
     }
 
     /**
@@ -81,8 +79,7 @@ public class ContactService {
      * @return The first Contact with the specified email
      */
     Contact findByEmail(String email) {
-        Contact contact = crud.findByEmail(email);
-        return contact;
+        return crud.findByEmail(email);
     }
 
     /**
@@ -94,8 +91,7 @@ public class ContactService {
      * @return The first Contact with the specified firstName
      */
     Contact findByFirstName(String firstName) {
-        Contact contact = crud.findByFirstName(firstName);
-        return contact;
+        return crud.findByFirstName(firstName);
     }
 
     /**
@@ -107,8 +103,7 @@ public class ContactService {
      * @return The first Contact with the specified lastName
      */
     Contact findByLastName(String lastName) {
-        Contact contact = crud.findByFirstName(lastName);
-        return contact;
+        return crud.findByFirstName(lastName);
     }
 
     /**
@@ -127,9 +122,7 @@ public class ContactService {
         validator.validateContact(contact);
         
         // Write the contact to the database.
-        Contact createdContact = crud.create(contact);
-        
-        return createdContact;
+        return crud.create(contact);
     }
 
     /**
@@ -148,9 +141,7 @@ public class ContactService {
         validator.validateContact(contact);
 
         // Either update the contact or add it if it can't be found.
-        Contact updatedContact = crud.update(contact);
-        
-        return updatedContact;
+        return crud.update(contact);
     }
 
     /**

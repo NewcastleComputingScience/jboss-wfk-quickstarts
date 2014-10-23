@@ -110,7 +110,7 @@ public class ContactRegistrationTest {
         Contact contact = createContactInstance("Jack", "Doe", "jack@mailinator.com", "2125551234", date);
         Response response = contactRESTService.createContact(contact);
 
-        assertEquals("Unexpected response status", 200, response.getStatus());
+        assertEquals("Unexpected response status", 201, response.getStatus());
         log.info(" New contact was persisted and returned status " + response.getStatus());
     }
 
@@ -191,7 +191,19 @@ public class ContactRegistrationTest {
 //        response = client.target(bookURI).request().get();
 //        assertEquals(Response.Status.NOT_FOUND, response.getStatusInfo());
 //    }
-    
+
+
+    /**
+     * <p>A utility method to construct a {@link org.jboss.quickstarts.wfk.contact.Contact Contact} object for use in
+     * testing. This object is not persisted.</p>
+     *
+     * @param firstName The first name of the Contact being created
+     * @param lastName  The last name of the Contact being created
+     * @param email     The email address of the Contact being created
+     * @param phone     The phone number of the Contact being created
+     * @param birthDate The birth date of the Contact being created
+     * @return The Contact object create
+     */
     private Contact createContactInstance(String firstName, String lastName, String email, String phone, Date birthDate) {
         Contact contact = new Contact();
         contact.setFirstName(firstName);

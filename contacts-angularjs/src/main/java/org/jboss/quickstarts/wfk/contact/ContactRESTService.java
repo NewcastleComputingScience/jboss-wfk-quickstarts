@@ -143,8 +143,8 @@ public class ContactRESTService {
             // Go add the new Contact.
             service.create(contact);
 
-            // Create an OK Response and pass the contact back in case it is needed.
-            builder = Response.ok(contact);
+            // Create a "Resource Created" 201 Response and pass the contact back in case it is needed.
+            builder = Response.status(Response.Status.CREATED).entity(contact);
             
             log.info("createContact completed. Contact = " + contact.getFirstName() + " " + contact.getLastName() + " " + contact.getEmail() + " " + contact.getPhoneNumber() + " "
                 + contact.getBirthDate() + " " + contact.getId());

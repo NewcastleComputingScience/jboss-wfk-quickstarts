@@ -40,11 +40,11 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * This is a the Domain object. The Contact class represents how contact resources are represented in the application
- * database.
- * <p>
- * The class also specifies how a contacts are retrieved from the database (with @NamedQueries), and acceptable values
- * for Contact fields (with @NotNull, @Pattern etc...)
+ * <p>This is a the Domain object. The Contact class represents how contact resources are represented in the application
+ * database.</p>
+ *
+ * <p>The class also specifies how a contacts are retrieved from the database (with @NamedQueries), and acceptable values
+ * for Contact fields (with @NotNull, @Pattern etc...)<p/>
  * 
  * @author Joshua Wilson
  */
@@ -67,10 +67,10 @@ public class Contact implements Serializable {
     public static final String FIND_BY_EMAIL = "Contact.findByEmail";
 
     /*
-     * The messages match the ones in the UI so that the user isn't confused by two similar error messages for the same
-     * error after hitting submit. This is if the form submits while having validation errors. The only difference is that 
-     * there are no periods(.) at the end of these message sentences, this gives us a way to verify where the message came 
-     * from. 
+     * The  error messages match the ones in the UI so that the user isn't confused by two similar error messages for
+     * the same error after hitting submit. This is if the form submits while having validation errors. The only
+     * difference is that there are no periods(.) at the end of these message sentences, this gives us a way to verify
+     * where the message came from.
      * 
      * Each variable name exactly matches the ones used on the HTML form name attribute so that when an error for that
      * variable occurs it can be sent to the correct input field on the form.  

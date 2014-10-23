@@ -54,8 +54,7 @@ public class ContactRepository {
      */
     List<Contact> findAllOrderedByName() {
         TypedQuery<Contact> query = em.createNamedQuery(Contact.FIND_ALL, Contact.class); 
-        List<Contact> contacts = query.getResultList();
-        return contacts;
+        return query.getResultList();
     }
 
     /**
@@ -78,8 +77,7 @@ public class ContactRepository {
      */
     Contact findByEmail(String email) {
         TypedQuery<Contact> query = em.createNamedQuery(Contact.FIND_BY_EMAIL, Contact.class).setParameter("email", email); 
-        Contact contact = query.getSingleResult();
-        return contact;
+        return query.getSingleResult();
     }
 
     /**
@@ -152,7 +150,6 @@ public class ContactRepository {
      * @return The Contact that has been merged
      * @throws ConstraintViolationException, ValidationException, Exception
      */
-//    Map<String, Object> update(Contact contact) throws Exception {
     Contact update(Contact contact) throws ConstraintViolationException, ValidationException, Exception {
         log.info("ContactRepository.update() - Updating " + contact.getFirstName() + " " + contact.getLastName());
         
