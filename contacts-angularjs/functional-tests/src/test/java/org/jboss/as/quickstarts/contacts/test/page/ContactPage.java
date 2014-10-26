@@ -155,7 +155,7 @@ public class ContactPage {
     }
 
     public boolean isEmailValid() {
-        return !birthDateRequiredValidationMessage.isDisplayed();
+        return !emailRequiredValidationMessage.isDisplayed() && !emailFormatValidationMessage.isDisplayed();
     }
 
     public boolean isEmailUnique() {
@@ -166,6 +166,10 @@ public class ContactPage {
             }
         }
         return true;
+    }
+
+    public boolean isBirthDateValid() {
+        return !birthDateRequiredValidationMessage.isDisplayed();
     }
 
     public boolean isFormValid() {
