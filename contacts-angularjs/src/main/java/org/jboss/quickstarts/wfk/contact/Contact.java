@@ -19,17 +19,7 @@ package org.jboss.quickstarts.wfk.contact;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
@@ -106,6 +96,9 @@ public class Contact implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
+    @Column(name = "state")
+    private String state;
+
     public Long getId() {
         return id;
     }
@@ -152,5 +145,13 @@ public class Contact implements Serializable {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getState() {
+        return this.state;
     }
 }

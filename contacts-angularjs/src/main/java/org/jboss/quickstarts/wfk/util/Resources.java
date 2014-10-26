@@ -16,8 +16,14 @@
  */
 package org.jboss.quickstarts.wfk.util;
 
+
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
+import java.io.IOException;
 import java.util.logging.Logger;
 
+import javax.annotation.PreDestroy;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.persistence.EntityManager;
@@ -43,7 +49,11 @@ public class Resources {
     private EntityManager em;
 
     @Produces
+    private CloseableHttpClient httpClient = HttpClients.createDefault();
+
+    @Produces
     public Logger produceLog(InjectionPoint injectionPoint) {
         return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
     }
+
 }
