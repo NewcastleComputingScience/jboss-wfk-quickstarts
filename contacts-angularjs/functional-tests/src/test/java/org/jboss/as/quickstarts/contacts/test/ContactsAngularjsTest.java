@@ -25,7 +25,7 @@ import org.jboss.arquillian.junit.InSequence;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.as.quickstarts.contacts.test.page.ContactListPage;
 import org.jboss.as.quickstarts.contacts.test.page.ContactPage;
-import org.jboss.as.quickstarts.contacts.test.page.fragment.NavigationPageFragment;
+import org.jboss.as.quickstarts.contacts.test.page.ShellPage;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,31 +38,31 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Contacts Mobile Basic quickstart functional test
+ * Contacts Angular.js quickstart functional test
  *
  * @author Oliver Kiss
  */
 @RunAsClient
 @RunWith(Arquillian.class)
-public class ContactsMobileBasicTest {
+public class ContactsAngularjsTest {
 
     /**
      * Locator for contact page
      */
-    @FindByJQuery("[data-role='page']:visible")
+    @FindByJQuery("div#view-pane")
     ContactPage contactPage;
 
     /**
      * Locator for contact list page
      */
-    @FindByJQuery("[data-role='page']:visible")
+    @FindByJQuery("div#view-pane")
     ContactListPage listPage;
 
     /**
-     * Locator for navigation panel
+     * Locator for page shell
      */
-    @FindByJQuery("[data-role='page']:visible")
-    NavigationPageFragment navigation;
+    @FindByJQuery("body")
+    ShellPage shell;
 
     /**
      * Injects browser to our test.
@@ -76,16 +76,18 @@ public class ContactsMobileBasicTest {
     @ArquillianResource
     URL contextPath;
 
-    //Test fixtures
+    /**
+     * Test fixtures
+     */
     private static String FIRST_NAME_INVALID = "John&";
     private static String FIRST_NAME_A = "John";
     private static String FIRST_NAME_B = "Jane";
     private static String LAST_NAME_INVALID = "Doe11";
     private static String LAST_NAME = "Doe";
     private static String PHONE_NUMBER_INVALID = "123a";
-    private static String PHONE_NUMBER_A = "2005551111";
-    private static String PHONE_NUMBER_B = "2005552222";
-    private static String PHONE_NUMBER_C = "2005553333";
+    private static String PHONE_NUMBER_A = "(200) 555-1111";
+    private static String PHONE_NUMBER_B = "(200) 555-2222";
+    private static String PHONE_NUMBER_C = "(200) 555-3333";
     private static String EMAIL_INVALID = "doe@";
     private static String EMAIL_A = "johndoe@mail.com";
     private static String EMAIL_B = "janedoe@mail.com";
@@ -106,64 +108,68 @@ public class ContactsMobileBasicTest {
         return Deployments.contacts();
     }
 
-
+    /**
+     * Load web page before test's start.
+     */
     @Before
     public void loadPage() {
         browser.get(contextPath.toString());
     }
 
+    /**
+     * Checks that all fields correctly display a "required" message when form is "dirty" but empty.
+     */
     @Test
     @InSequence(1)
     public void requiredFieldsValidationTest() {
-        navigation.openAddPage();
-        contactPage.fillContact(new Contact(" ", "", "", ""));
-        contactPage.submit(false);
-        assertFalse(contactPage.isFirstNameValid());
-        assertFalse(contactPage.isLastNameValid());
-        assertFalse(contactPage.isPhoneNumberValid());
-        assertFalse(contactPage.isEmailValid());
-        assertFalse(contactPage.isBirthDateValid());
+        shell.openAddPage();
+        contactPage.waitForPage();
+        contactPage.fillContact(new Contact(FIRST_NAME_A + " " + LAST_NAME, " ", " ", " "));
+        contactPage.clearContact();
+        assertFalse("First name should be required", contactPage.isFirstNameValid());
+        assertFalse("Last name should be required", contactPage.isLastNameValid());
+        assertFalse("Phone Number should be required", contactPage.isPhoneNumberValid());
+        assertFalse("Email should be required", contactPage.isEmailValid());
+        assertFalse("Birthdate should be required", contactPage.isBirthDateValid());
     }
 
     @Test
     @InSequence(2)
     public void contactFormValidationTest() {
-        navigation.openAddPage();
+        shell.openAddPage();
+        contactPage.waitForPage();
         contactPage.fillContact(new Contact(FIRST_NAME_INVALID + " " + LAST_NAME_INVALID, PHONE_NUMBER_INVALID, EMAIL_INVALID, DATE_INVALID));
-        assertFalse(contactPage.isFirstNameValid());
-        assertFalse(contactPage.isLastNameValid());
-        assertFalse(contactPage.isPhoneNumberValid());
-        assertFalse(contactPage.isEmailValid());
-        assertFalse(contactPage.isBirthDateValid());
+        assertFalse("First name should not be valid", contactPage.isFirstNameValid());
+        assertFalse("Last name should not be valid", contactPage.isLastNameValid());
+        assertFalse("Phone Number should not be valid", contactPage.isPhoneNumberValid());
+        assertFalse("Email should not be valid", contactPage.isEmailValid());
+        //Don't check birthdate validity message as Angular doesn't support date input validation as of 1.2.8
         contactPage.submit(false);
 
-        contactPage.fillContact(new Contact(FIRST_NAME_A + " " + LAST_NAME, PHONE_NUMBER_A, EMAIL_A, DATE_TOO_OLD));
-        assertTrue(contactPage.isFirstNameValid());
-        assertTrue(contactPage.isLastNameValid());
-        assertTrue(contactPage.isPhoneNumberValid());
-        assertTrue(contactPage.isEmailValid());
-        assertFalse(contactPage.isBirthDateValid());
-        contactPage.submit(false);
-
-        contactPage.fillContact(new Contact(FIRST_NAME_A + " " + LAST_NAME, PHONE_NUMBER_A, EMAIL_A, DATE_FUTURE));
-        assertTrue(contactPage.isFirstNameValid());
-        assertTrue(contactPage.isLastNameValid());
-        assertTrue(contactPage.isPhoneNumberValid());
-        assertTrue(contactPage.isEmailValid());
-        assertFalse(contactPage.isBirthDateValid());
+        contactPage.fillContact(new Contact(FIRST_NAME_A + " " + LAST_NAME, PHONE_NUMBER_A, EMAIL_INVALID, DATE_INVALID));
+        assertTrue("First name should be valid", contactPage.isFirstNameValid());
+        assertTrue("Last name should be valid", contactPage.isLastNameValid());
+        assertTrue("Phone Number should be valid", contactPage.isPhoneNumberValid());
+        assertFalse("Email should not be valid", contactPage.isEmailValid());
+        //Don't check birthdate validity message as Angular doesn't support date input validation as of 1.2.8
         contactPage.submit(false);
     }
 
     @Test
     @InSequence(3)
     public void addContactTest() {
+        shell.openAddPage();
+        contactPage.waitForPage();
         Contact newContact = new Contact(FIRST_NAME_A + " " + LAST_NAME, PHONE_NUMBER_A, EMAIL_A, DATE);
-
-        navigation.openAddPage();
         contactPage.fillContact(newContact);
+        assertTrue("First name should be valid", contactPage.isFirstNameValid());
+        assertTrue("Last name should be valid", contactPage.isLastNameValid());
+        assertTrue("Phone Number should be valid", contactPage.isPhoneNumberValid());
+        assertTrue("Email should be valid", contactPage.isEmailValid());
+        assertTrue("Birthdate should be valid", contactPage.isBirthDateValid());
         assertTrue(contactPage.isFormValid());
         contactPage.submit(true);
-
+        shell.openListPage();
         listPage.waitForPage();
         listPage.showDetails();
         assertTrue(listPage.getContacts().contains(newContact));
@@ -174,18 +180,23 @@ public class ContactsMobileBasicTest {
     public void duplicateEmailValidationTest() {
         listPage.showDetails();
         String existingEmail = listPage.getContacts().get(0).getEmail();
+        System.out.println("Existing email used:" + existingEmail);
         Contact newContact = new Contact(FIRST_NAME_B + " " + LAST_NAME, PHONE_NUMBER_B, existingEmail, DATE);
 
-        navigation.openAddPage();
+        shell.openAddPage();
+        System.out.println("Adding user: " + newContact.getName() + " with email "+existingEmail);
         contactPage.fillContact(newContact);
-        assertTrue(contactPage.isFormValid());
+        assertTrue("Contact form should be valid", contactPage.isFormValid());
+
         contactPage.submit(true);
-        contactPage.waitForPage();
-        assertFalse(contactPage.isEmailValid());
+
+        assertFalse("Email should not be unique", contactPage.isEmailUnique());
 
         newContact.setEmail(EMAIL_B);
         contactPage.fillContact(newContact);
         contactPage.submit(true);
+
+        shell.openListPage();
         listPage.waitForPage();
         listPage.showDetails();
         assertTrue(listPage.getContacts().contains(newContact));
@@ -202,6 +213,7 @@ public class ContactsMobileBasicTest {
         contactPage.fillContact(contact);
         contactPage.submit(true);
 
+        shell.openListPage();
         listPage.waitForPage();
         listPage.showDetails();
         assertTrue(listPage.getContacts().contains(contact));

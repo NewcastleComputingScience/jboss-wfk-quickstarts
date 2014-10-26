@@ -14,48 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.as.quickstarts.contacts.test.page.fragment;
+package org.jboss.as.quickstarts.contacts.test.page;
 
 import org.jboss.arquillian.graphene.findby.FindByJQuery;
 import org.openqa.selenium.WebElement;
 
+import static org.jboss.arquillian.graphene.Graphene.waitAjax;
 import static org.jboss.arquillian.graphene.Graphene.waitGui;
+import static org.jboss.arquillian.graphene.Graphene.waitModel;
 
 /**
- * Page fragment for controlling navigation panel
+ * <p>Class to describe how to manipulate the Shell of all pages (navigation etc..)</p>
  *
- * @author Oliver Kiss
+ * @author hugofirth
+ * @see org.openqa.selenium.WebElement
  */
-public class NavigationPageFragment {
+public class ShellPage {
 
-    @FindByJQuery("[id*='page-menu-button']")
-    private WebElement showMenuButton;
 
-    @FindByJQuery(".ui-panel-open a[href*='contacts-add-page']")
+    @FindByJQuery(".header ul.nav li a[href*='#/add']")
     private WebElement addPageLink;
 
-    @FindByJQuery(".ui-panel-open a[href*='contacts-list-page']")
-    private WebElement listPageLink;
+    @FindByJQuery(".header ul.nav li a[href='#/']")
+    private WebElement homePageLink;
 
-    @FindByJQuery(".ui-panel-open a[href*='contacts-detail-list-page']")
-    private WebElement detailedlistPageLink;
+    @FindByJQuery("form#contactForm")
+    private WebElement contactForm;
+
+    @FindByJQuery("ul.contact-list")
+    private WebElement contactList;
+
 
     public void openAddPage() {
-        openPage(addPageLink);
+        addPageLink.click();
     }
 
     public void openListPage() {
-        openPage(listPageLink);
-    }
-
-    public void openDetailedListPage() {
-        openPage(detailedlistPageLink);
-    }
-
-    private void openPage(WebElement link) {
-        showMenuButton.click();
-        waitGui().until().element(link).is().present();
-        link.click();
-        waitGui().until().element(link).is().not().present();
+        homePageLink.click();
     }
 }

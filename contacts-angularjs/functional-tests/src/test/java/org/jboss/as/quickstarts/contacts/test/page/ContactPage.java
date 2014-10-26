@@ -17,10 +17,10 @@
 package org.jboss.as.quickstarts.contacts.test.page;
 
 import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.jboss.arquillian.graphene.condition.element.WebElementConditionFactory;
 import org.jboss.arquillian.graphene.findby.FindByJQuery;
 import org.jboss.arquillian.graphene.fragment.Root;
 import org.jboss.as.quickstarts.contacts.test.Contact;
+import org.jboss.as.quickstarts.contacts.test.page.fragment.MessageFragment;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -45,6 +45,9 @@ public class ContactPage {
     @Root
     private WebElement page;
 
+    @FindBy(className = "alert")
+    private List<MessageFragment> messages;
+
     @FindBy(name = "firstName")
     private WebElement firstName;
 
@@ -60,25 +63,43 @@ public class ContactPage {
     @FindBy(name = "birthDate")
     private WebElement birthDate;
 
-    @FindByJQuery("label[for*='input-firstName'].error")
-    private WebElement firstNameValidationMessage;
+    @FindByJQuery("p[id='firstName-required'].help-block")
+    private WebElement firstNameRequiredValidationMessage;
 
-    @FindByJQuery("label[for*='input-lastName'].error")
-    private WebElement lastNameValidationMessage;
+    @FindByJQuery("p[id='firstName-format'].help-block")
+    private WebElement firstNameFormatValidationMessage;
 
-    @FindByJQuery("label[for*='input-tel'].error")
-    private WebElement phoneNumberValidationMessage;
+    @FindByJQuery("p[id='lastName-required'].help-block")
+    private WebElement lastNameRequiredValidationMessage;
 
-    @FindByJQuery("label[for*='input-email'].error")
-    private WebElement emailValidationMessage;
+    @FindByJQuery("p[id='lastName-format'].help-block")
+    private WebElement lastNameFormatValidationMessage;
 
-    @FindByJQuery("label[for*='input-date'].error")
-    private WebElement birthDateValidationMessage;
+    @FindByJQuery("p[id='phoneNumber-required'].help-block")
+    private WebElement phoneNumberRequiredValidationMessage;
 
-    @FindByJQuery("label[for*='input-'].error:visible")
+    @FindByJQuery("p[id='phoneNumber-format'].help-block")
+    private WebElement phoneNumberFormatValidationMessage;
+
+    @FindByJQuery("p[id='email-required'].help-block")
+    private WebElement emailRequiredValidationMessage;
+
+    @FindByJQuery("p[id='email-format'].help-block")
+    private WebElement emailFormatValidationMessage;
+
+    @FindByJQuery("p[id='birthdate-required'].help-block")
+    private WebElement birthDateRequiredValidationMessage;
+
+    @FindByJQuery("p[id='birthdate-future'].help-block")
+    private WebElement birthDateFutureValidationMessage;
+
+    @FindByJQuery("p[id='birthdate-max-age'].help-block")
+    private WebElement birthDateMaxAgeValidationMessage;
+
+    @FindByJQuery("p.help-block:visible")
     private List<WebElement> validationMessages;
 
-    @FindByJQuery("[onclick*='#submit']:visible")
+    @FindByJQuery("button#save-button")
     private WebElement saveButton;
 
     public void fillContact(Contact contact) {
@@ -94,6 +115,14 @@ public class ContactPage {
         birthDate.clear();
         birthDate.sendKeys(contact.getBirthDate());
         page.click();
+    }
+
+    public void clearContact() {
+        firstName.clear();
+        lastName.clear();
+        phoneNumber.clear();
+        email.clear();
+        birthDate.clear();
     }
 
     public Contact getContact() {
@@ -114,23 +143,29 @@ public class ContactPage {
     }
 
     public boolean isFirstNameValid() {
-        return !firstNameValidationMessage.isDisplayed();
+        return !firstNameRequiredValidationMessage.isDisplayed() && !firstNameFormatValidationMessage.isDisplayed();
     }
 
     public boolean isLastNameValid() {
-        return !lastNameValidationMessage.isDisplayed();
+        return !lastNameRequiredValidationMessage.isDisplayed() && !lastNameFormatValidationMessage.isDisplayed();
     }
 
     public boolean isPhoneNumberValid() {
-        return !phoneNumberValidationMessage.isDisplayed();
+        return !phoneNumberRequiredValidationMessage.isDisplayed() && !phoneNumberFormatValidationMessage.isDisplayed();
     }
 
     public boolean isEmailValid() {
-        return !emailValidationMessage.isDisplayed();
+        return !birthDateRequiredValidationMessage.isDisplayed();
     }
 
-    public boolean isBirthDateValid() {
-        return new WebElementConditionFactory(birthDateValidationMessage).not().isPresent().apply(browser);
+    public boolean isEmailUnique() {
+        String notUniqueError = "That email is already used, please use a unique email";
+        for(MessageFragment m : messages) {
+            if(m.getMessageText().equals(notUniqueError)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean isFormValid() {
@@ -138,7 +173,7 @@ public class ContactPage {
     }
 
     public void waitForPage() {
-        waitModel().until().element(firstName).is().visible();
+        waitGui().until().element(firstName).is().present();
     }
 
 }

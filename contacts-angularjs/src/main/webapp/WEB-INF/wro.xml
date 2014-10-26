@@ -20,41 +20,26 @@
         xsi:schemaLocation="http://www.isdc.ro/wro wro.xsd">
 
     <group name="app.min">
-        <js>/js/app.module.js</js>
-        <js>/js/controllers.js</js>
-        <js>/js/directives.js</js>
-
+        <css>/resources/css/main.css</css>
+        <js>/app/app.module.js</js>
+        <js>/app/app.route.js</js>
+        <js>/app/app.controller.js</js>
+        <js>/app/contact/contact.module.js</js>
+        <js>/app/contact/contact.js</js>
+        <js>/app/contact/contact.controller.js</js>
+        <js>/app/util/util.module.js</js>
+        <js>/app/util/ajaxNonceInterceptor.service.js</js>
+        <js>/app/util/messageBag.service.js</js>
+        <js>/app/util/messageBag.directive.js</js>
     </group>
 
-    <group name="controllers.min">
-        <js>/js/controllers.js</js>
+    <group name="vendor.min">
+        <css>/resources/css/libs/bootstrap.css</css>
+        <js>/libs/jquery-2.0.3.js</js>
+        <js>/libs/lodash-2.4.1.js</js>
+        <js>/libs/angular.js</js>
+        <js>/libs/angular-route.js</js>
+        <js>/libs/angular-resource.js</js>
     </group>
 
-    <group name="directives.min">
-        <js>/js/directives.js</js>
-    </group>
-
-    <group name="services.min">
-        <js>/js/services.js</js>
-    </group>
-
-    <group name="theming.min">
-        <js>/js/theming.js</js>
-    </group>
-
-    <group name="util.min">
-        <js>/js/util.js</js>
-    </group>
-
-    <group name="validation.min">
-        <js>/js/validation.js</js>
-    </group>
-
-    <group name="app-style.min">
-        <css>/css/app-style.css</css>
-    </group>
-
-    <group name="validator.min">
-        <css>/css/validator.css</css>
-    </group>
 </groups>

@@ -25,8 +25,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jboss.arquillian.graphene.Graphene.waitAjax;
-import static org.jboss.arquillian.graphene.Graphene.waitModel;
+import static org.jboss.arquillian.graphene.Graphene.waitGui;
 
 /**
  * Manipulation with Contact List page
@@ -35,16 +34,16 @@ import static org.jboss.arquillian.graphene.Graphene.waitModel;
  */
 public class ContactListPage {
 
-    @FindByJQuery("ul[data-role='listview']:visible li[id*='contact']")
+    @FindByJQuery("li.contact")
     private List<ContactListItemPageFragment> contacts;
 
-    @FindBy(id = "contacts-detail-list-page-button")
+    @FindBy(id = "toggleDetails")
     private WebElement showDetailsButton;
 
-    @FindBy(id = "contacts-list-page-button")
-    private WebElement showListButton;
+    @FindByJQuery("div.contact-details:eq(0)")
+    private WebElement firstContactsDetails;
 
-    @FindByJQuery(".ui-filterable:eq(0)")
+    @FindByJQuery("input#contact-search-term")
     private WebElement filterInput;
 
     public void editContact(String name) {
@@ -66,15 +65,10 @@ public class ContactListPage {
 
     public void showDetails() {
         showDetailsButton.click();
-        waitAjax().until().element(showListButton).is().present();
-    }
-
-    public void showList() {
-        showListButton.click();
-        waitAjax().until().element(showDetailsButton).is().present();
+        waitGui().until().element(firstContactsDetails).is().visible();
     }
 
     public void waitForPage() {
-        waitModel().until().element(filterInput).is().visible();
+        waitGui().until().element(filterInput).is().present();
     }
 }

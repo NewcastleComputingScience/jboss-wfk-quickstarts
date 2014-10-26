@@ -32,7 +32,7 @@
     <!-- A list of stored contacts -->
     <div class="contact-list-heading clearfix">
         <p class="pull-left">Contact {{(details)?'Details':'Name'}}</p>
-        <button class="btn pull-right" ng-click="details=!details">
+        <button class="btn pull-right" id="toggleDetails" ng-click="details=!details">
             <span class="glyphicon {{(details)?'glyphicon-resize-small':'glyphicon-resize-full'}}"></span>
         </button>
     </div>

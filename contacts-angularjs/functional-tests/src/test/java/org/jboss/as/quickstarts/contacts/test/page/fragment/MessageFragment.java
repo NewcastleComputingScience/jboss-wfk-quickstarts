@@ -18,18 +18,16 @@ package org.jboss.as.quickstarts.contacts.test.page.fragment;
 
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.findby.FindByJQuery;
-import org.jboss.as.quickstarts.contacts.test.Contact;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import static org.jboss.arquillian.graphene.Graphene.guardAjax;
+import org.openqa.selenium.support.FindBy;
 
 /**
- * Page fragment for list items on contact list page
+ * Page fragment for messages on all pages.
  *
- * @author Oliver Kiss
+ * @author hugofirth
  */
-public class ContactListItemPageFragment {
+public class MessageFragment {
 
     /**
      * Injects browser to our test.
@@ -37,27 +35,10 @@ public class ContactListItemPageFragment {
     @Drone
     private WebDriver browser;
 
-    @FindByJQuery("a[href*='#/edit']")
-    private WebElement name;
+    @FindBy(tagName = "p")
+    private WebElement message;
 
-    @FindByJQuery("div.contact-details p:nth-child(1) strong")
-    private WebElement email;
-
-    @FindByJQuery("div.contact-details p:nth-child(2)")
-    private WebElement phoneNumber;
-
-    @FindByJQuery("div.contact-details p:nth-child(3)")
-    private WebElement birthDate;
-
-    public Contact getContact() {
-        return new Contact(name.getText(), phoneNumber.getText(), email.getText(), birthDate.getText());
-    }
-
-    public String getContactName() {
-        return name.getText();
-    }
-
-    public void editContact() {
-        name.click();
+    public String getMessageText() {
+        return message.getText();
     }
 }

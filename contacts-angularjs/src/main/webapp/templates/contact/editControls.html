@@ -19,7 +19,7 @@
     <div class="btn-group pull-right">
         <!-- ng-disable conditionally applies the special attribute 'disabled'. -->
         <!-- When clicked, execute $scope.addContact() function. -->
-        <button class="btn btn-primary" ng-disabled="contactForm.$invalid" ng-click="saveContact()">
+        <button class="btn btn-primary" id="save-button" ng-disabled="contactForm.$invalid" ng-click="saveContact()">
             <span class="glyphicon glyphicon-floppy-saved"></span>&nbsp;&nbsp;Save
         </button>
         <!-- When clicked, execute $scope.deleteContact(). -->
