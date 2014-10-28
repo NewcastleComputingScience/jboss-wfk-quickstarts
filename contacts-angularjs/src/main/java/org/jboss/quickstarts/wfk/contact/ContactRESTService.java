@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -67,7 +68,7 @@ import javax.ws.rs.WebApplicationException;
 @Stateless
 public class ContactRESTService {
     @Inject
-    private Logger log;
+    private @Named("logger") Logger log;
     
     @Inject
     private ContactService service;

@@ -16,29 +16,26 @@
  */
 package org.jboss.quickstarts.wfk.contact;
 
-import org.apache.http.client.HttpClient;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.inject.Named;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import java.util.logging.Logger;
 
 /**
@@ -60,7 +57,7 @@ import java.util.logging.Logger;
 public class ContactService {
 
     @Inject
-    private Logger log;
+    private @Named("logger") Logger log;
 
     @Inject
     private ContactValidator validator;
@@ -69,7 +66,7 @@ public class ContactService {
     private ContactRepository crud;
 
     @Inject
-    private CloseableHttpClient httpClient;
+    private @Named("httpClient") CloseableHttpClient httpClient;
     
     /**
      * <p>Returns a List of all persisted {@link Contact} objects, sorted alphabetically by last name.<p/>

@@ -70,9 +70,12 @@ public class ContactRegistrationTest {
 
     @Deployment
     public static Archive<?> createTestArchive() {
-//        File[] libs = Maven.resolver().loadPomFromFile("pom.xml").resolve(
-//                "org.hibernate.javax.persistence:hibernate-jpa-2.0-api"
-//        ).withTransitivity().asFile();
+        File[] libs = Maven.resolver().loadPomFromFile("pom.xml").resolve(
+                "org.apache.httpcomponents:httpclient:4.3.2",
+                "org.json:json:20140107"
+        ).withTransitivity().asFile();
+
+
 
         Archive<?> archive = ShrinkWrap
             .create(WebArchive.class, "test.war")
@@ -82,7 +85,7 @@ public class ContactRegistrationTest {
                         ContactValidator.class, 
                         ContactService.class, 
                         Resources.class)
-//            .addAsLibraries(libs)
+            .addAsLibraries(libs)
             .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource("arquillian-ds.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -108,7 +111,7 @@ public class ContactRegistrationTest {
     @Test
     @InSequence(1)
     public void testRegister() throws Exception {
-        Contact contact = createContactInstance("Jack", "Doe", "jack@mailinator.com", "2125551234", date);
+        Contact contact = createContactInstance("Jack", "Doe", "jack@mailinator.com", "(212) 555-1234", date);
         Response response = contactRESTService.createContact(contact);
 
         assertEquals("Unexpected response status", 201, response.getStatus());
@@ -124,7 +127,7 @@ public class ContactRegistrationTest {
 
         assertEquals("Unexpected response status", 400, response.getStatus());
         assertNotNull("response.getEntity() should not be null", response.getEntity());
-        assertEquals("Unexpected response.getEntity(). It contains " + response.getEntity(), 3,
+        assertEquals("Unexpected response.getEntity(). It contains " + response.getEntity(), 4,
             ((Map<String, String>) response.getEntity()).size());
         log.info("Invalid contact register attempt failed with return code " + response.getStatus());
     }
@@ -134,11 +137,11 @@ public class ContactRegistrationTest {
     @InSequence(3)
     public void testDuplicateEmail() throws Exception {
         // Register an initial user
-        Contact contact = createContactInstance("Jane", "Doe", "jane@mailinator.com", "2125551234", date);
+        Contact contact = createContactInstance("Jane", "Doe", "jane@mailinator.com", "(212) 555-1234", date);
         contactRESTService.createContact(contact);
 
         // Register a different user with the same email
-        Contact anotherContact = createContactInstance("John", "Doe", "jane@mailinator.com", "2133551234", date);
+        Contact anotherContact = createContactInstance("John", "Doe", "jane@mailinator.com", "(213) 355-1234", date);
         Response response = contactRESTService.createContact(anotherContact);
 
         assertEquals("Unexpected response status", 409, response.getStatus());

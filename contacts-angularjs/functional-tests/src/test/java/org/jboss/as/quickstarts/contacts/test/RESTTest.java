@@ -51,7 +51,7 @@ public class RESTTest {
     private static final String NEW_CONTACT_LASTNAME = "Doe";
     private static final String NEW_CONTACT_EMAIL = "john.doe@redhat.com";
     private static final String NEW_CONTACT_BIRTHDATE = "1970-01-01";
-    private static final String NEW_CONTACT_PHONE = "7894561239";
+    private static final String NEW_CONTACT_PHONE = "(789) 456-1239";
 
     private static final String DEFAULT_CONTACT_FIRSTNAME = "John";
     private static final String DEFAULT_CONTACT_LASTNAME = "Smith";

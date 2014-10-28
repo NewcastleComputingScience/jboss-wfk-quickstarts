@@ -17,6 +17,7 @@
 package org.jboss.quickstarts.wfk.contact;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -42,7 +43,7 @@ import java.util.logging.Logger;
 public class ContactRepository {
 
     @Inject
-    private Logger log;
+    private @Named("logger") Logger log;
 
     @Inject
     private EntityManager em;
