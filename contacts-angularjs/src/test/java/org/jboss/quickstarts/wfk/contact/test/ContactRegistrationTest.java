@@ -23,30 +23,23 @@ import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import java.util.logging.Logger;
-
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.core.Response;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
-
 import org.jboss.quickstarts.wfk.contact.Contact;
 import org.jboss.quickstarts.wfk.contact.ContactRepository;
 import org.jboss.quickstarts.wfk.contact.ContactRESTService;
 import org.jboss.quickstarts.wfk.contact.ContactService;
 import org.jboss.quickstarts.wfk.contact.ContactValidator;
 import org.jboss.quickstarts.wfk.util.Resources;
-
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-
-// JAX-RS 2.0 import statement
-//import javax.ws.rs.client.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -63,19 +56,21 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class ContactRegistrationTest {
 
-    /*
-     * Many of the comments in the code below contain code for use with JAX-RS 2.0 for demonstration purposes.
-     * If you are not using JAX-RS 2.0 then these comments may be ignored.
+    /**
+     * <p>Compiles an Archive using Shrinkwrap, containing those external dependencies necessary to run the tests.</p>
+     *
+     * <p>Note: This code will be needed at the start of each Arquillian test, but should not need to be edited, except
+     * to pass *.class values to .addClasses(...) which are appropriate to the functionality you are trying to test.</p>
+     *
+     * @return Micro test war to be deployed and executed.
      */
-
     @Deployment
     public static Archive<?> createTestArchive() {
+        //HttpComponents and org.JSON are required by ContactService
         File[] libs = Maven.resolver().loadPomFromFile("pom.xml").resolve(
                 "org.apache.httpcomponents:httpclient:4.3.2",
                 "org.json:json:20140107"
         ).withTransitivity().asFile();
-
-
 
         Archive<?> archive = ShrinkWrap
             .create(WebArchive.class, "test.war")
@@ -97,14 +92,8 @@ public class ContactRegistrationTest {
     ContactRESTService contactRESTService;
     
     @Inject
-    Logger log;
-    
-    // The URI is needed for the JAX-RS 2.0 tests.
-//    private static URI uri = UriBuilder.fromUri("http://localhost/jboss-contacts-angularjs/rest/contact").port(8080).build();
-    
-    // JAX-RS 2.0 Client API
-//    private static Client client = ClientBuilder.newClient();
-    
+    @Named("logger") Logger log;
+
     //Set millis 498484800000 from 1985-10-10T12:00:00.000Z
     private Date date = new Date(498484800000L);
 
@@ -150,52 +139,6 @@ public class ContactRegistrationTest {
             ((Map<String, String>) response.getEntity()).size());
         log.info("Duplicate contact register attempt failed with return code " + response.getStatus());
     }
-
-    // Uncomment when you have access to JAX-RS 2.0
-//    @Test
-//    @InSequence(4)
-//    public void shouldNotCreateANullContact() throws JAXBException {
-//        //POSTs a null Contact
-//        Response response = client.target(uri).request().post(Entity.entity(null, MediaType.APPLICATION_JSON));
-//        assertEquals(Response.Status.BAD_REQUEST, response.getStatusInfo());
-//    }
-//    
-//    @Test
-//    @InSequence(5)
-//    public void shouldNotFindTheContactID() throws JAXBException {
-//        // GETs a Contact with an unknown ID
-//        Response response = client.target(uri).path("unknownID").request().get();
-//        assertEquals(Response.Status.NOT_FOUND, response.getStatusInfo());
-//    }
-//    
-//    @Test
-//    @InSequence(6)
-//    public void shouldCreateAndDeleteAContact() throws JAXBException {
-//        
-//        Contact contact = createContactInstance("Jason", "Smith", "jason@mailinator.com", "2125551234", date);
-//        
-//        // POSTs a Contact
-//        Response response = client.target(uri).request().post(Entity.entity(contact, MediaType.APPLICATION_JSON));
-//        
-//        assertEquals(Response.Status.CREATED, response.getStatusInfo());
-//        URI contactURI = response.getLocation();
-//        
-//        // With the location, GETs the Contact
-//        response = client.target(contactURI).request().get();
-//        contact = response.readEntity(Contact.class);
-//        assertEquals(Response.Status.OK, response.getStatusInfo());
-//        assertEquals("Jason", contact.getFirstName());
-//        
-//        // GETs the Contact ID and DELETEs it
-//        String contactID = contactURI.toString().split("/")[6];
-//        response = client.target(uri).path(contactID).request().delete();
-//        assertEquals(Response.Status.NO_CONTENT, response.getStatusInfo());
-//        
-//        // GETs the Contact and checks if it has been deleted
-//        response = client.target(bookURI).request().get();
-//        assertEquals(Response.Status.NOT_FOUND, response.getStatusInfo());
-//    }
-
 
     /**
      * <p>A utility method to construct a {@link org.jboss.quickstarts.wfk.contact.Contact Contact} object for use in
