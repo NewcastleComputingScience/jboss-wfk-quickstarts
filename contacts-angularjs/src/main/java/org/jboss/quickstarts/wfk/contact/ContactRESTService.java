@@ -89,11 +89,15 @@ public class ContactRESTService {
     /**
      * <p>Search for and return a Contact identified by email address.<p/>
      *
+     * <p>Path annotation includes very simple regex to differentiate between email addresses and Ids.
+     * <strong>DO NOT</strong> attempt to use this regex to validate email addresses.</p>
+     *
+     *
      * @param email The string parameter value provided as a Contact's email
      * @return A Response containing a single Contact
      */
     @GET
-    @Path("/{email: ^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$ }")
+    @Path("/{email:^.+@.+$}")
     public Response retrieveContactsByEmail(@PathParam("email") String email) {
         Contact contact;
         try {
@@ -111,7 +115,7 @@ public class ContactRESTService {
      * @return A Response containing a single Contact
      */
     @GET
-    @Path("/{id:[0-9][0-9]*}")
+    @Path("/{id:[0-9]+}")
     public Response retrieveContactById(@PathParam("id") long id) {
         Contact contact = service.findById(id);
         if (contact == null) {
