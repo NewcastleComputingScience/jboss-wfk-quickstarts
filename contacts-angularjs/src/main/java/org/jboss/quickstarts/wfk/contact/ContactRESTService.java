@@ -22,9 +22,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import javax.ejb.NoSuchEntityException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.NoResultException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -81,9 +83,6 @@ public class ContactRESTService {
     @GET
     public Response retrieveAllContacts() {
         List<Contact> contacts = service.findAllOrderedByName();
-        if (contacts.isEmpty()) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
         return Response.ok(contacts).build();
     }
 
@@ -94,10 +93,12 @@ public class ContactRESTService {
      * @return A Response containing a single Contact
      */
     @GET
-    @Path("/{email}")
+    @Path("/{email: ^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$ }")
     public Response retrieveContactsByEmail(@PathParam("email") String email) {
-        Contact contact = service.findByEmail(email);
-        if (contact == null) {
+        Contact contact;
+        try {
+            contact = service.findByEmail(email);
+        } catch (NoResultException e) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         return Response.ok(contact).build();
