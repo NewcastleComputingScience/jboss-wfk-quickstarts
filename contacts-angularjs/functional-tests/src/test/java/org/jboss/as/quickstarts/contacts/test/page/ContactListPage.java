@@ -24,8 +24,10 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.jboss.arquillian.graphene.Graphene.waitGui;
+import static org.jboss.arquillian.graphene.Graphene.waitAjax;
 
 /**
  * Manipulation with Contact List page
@@ -43,7 +45,7 @@ public class ContactListPage {
     @FindByJQuery("div.contact-details:eq(0)")
     private WebElement firstContactsDetails;
 
-    @FindByJQuery("input#contact-search-term")
+    @FindBy(id = "contact-search-term")
     private WebElement filterInput;
 
     public void editContact(String name) {
@@ -69,6 +71,6 @@ public class ContactListPage {
     }
 
     public void waitForPage() {
-        waitGui().until().element(filterInput).is().present();
+        waitAjax().withTimeout(10, TimeUnit.SECONDS).pollingEvery(2, TimeUnit.SECONDS).until().element(filterInput).is().present();
     }
 }

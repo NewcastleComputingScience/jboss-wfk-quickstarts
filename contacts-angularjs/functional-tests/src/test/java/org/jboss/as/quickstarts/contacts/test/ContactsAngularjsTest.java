@@ -37,6 +37,7 @@ import java.net.URL;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+
 /**
  * Contacts Angular.js quickstart functional test
  *
@@ -113,7 +114,7 @@ public class ContactsAngularjsTest {
      */
     @Before
     public void loadPage() {
-        browser.get(contextPath.toString());
+            browser.get(contextPath.toString());
     }
 
     /**
@@ -178,19 +179,19 @@ public class ContactsAngularjsTest {
     @Test
     @InSequence(4)
     public void duplicateEmailValidationTest() {
+        shell.openListPage();
+        listPage.waitForPage();
         listPage.showDetails();
         String existingEmail = listPage.getContacts().get(0).getEmail();
-        System.out.println("Existing email used:" + existingEmail);
         Contact newContact = new Contact(FIRST_NAME_B + " " + LAST_NAME, PHONE_NUMBER_B, existingEmail, DATE);
 
         shell.openAddPage();
-        System.out.println("Adding user: " + newContact.getName() + " with email "+existingEmail);
+        contactPage.waitForPage();
         contactPage.fillContact(newContact);
         assertTrue("Contact form should be valid", contactPage.isFormValid());
 
         contactPage.submit(true);
-
-        assertFalse("Email should not be unique", contactPage.isEmailUnique());
+        assertFalse("Email should not be unique", contactPage.isMessageDisplayed("That email is already used, please use a unique email"));
 
         newContact.setEmail(EMAIL_B);
         contactPage.fillContact(newContact);

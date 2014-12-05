@@ -26,6 +26,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.jboss.arquillian.graphene.Graphene.*;
 
@@ -45,7 +46,7 @@ public class ContactPage {
     @Root
     private WebElement page;
 
-    @FindBy(className = "alert")
+    @FindBy(className = "message")
     private List<MessageFragment> messages;
 
     @FindBy(name = "firstName")
@@ -158,10 +159,11 @@ public class ContactPage {
         return !emailRequiredValidationMessage.isDisplayed() && !emailFormatValidationMessage.isDisplayed();
     }
 
-    public boolean isEmailUnique() {
-        String notUniqueError = "That email is already used, please use a unique email";
+    public boolean isMessageDisplayed(String message) {
+        System.out.println("Checking that email is unique");
         for(MessageFragment m : messages) {
-            if(m.getMessageText().equals(notUniqueError)) {
+            System.out.println("Message: "+m);
+            if(m.getMessageText().equals(message)) {
                 return false;
             }
         }
@@ -177,7 +179,7 @@ public class ContactPage {
     }
 
     public void waitForPage() {
-        waitGui().until().element(firstName).is().present();
+        waitAjax().withTimeout(10, TimeUnit.SECONDS).pollingEvery(2, TimeUnit.SECONDS).until().element(firstName).is().present();
     }
 
 }

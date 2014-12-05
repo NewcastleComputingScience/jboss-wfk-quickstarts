@@ -15,7 +15,7 @@
     limitations under the License.
 -->
 <!-- This is an Angular.js template, bound to the messageBag directive -->
-<div class="row alert alert-dismissable clearfix alert-{{message.status}}" ng-repeat="message in messages.get()">
+<div class="row alert alert-dismissable message clearfix alert-{{message.status}}" ng-repeat="message in messages.get()">
     <p class="pull-left text-left">{{message.body}}</p>
     <button type="button" class="close pull-right" ng-click="messages.remove(message)">
         <span aria-hidden="true">x</span>
