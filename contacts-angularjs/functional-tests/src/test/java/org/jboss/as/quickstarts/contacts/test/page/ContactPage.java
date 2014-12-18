@@ -137,7 +137,7 @@ public class ContactPage {
 
     public void submit(boolean requestExpected) {
         if (requestExpected) {
-            guardAjax(saveButton).click();
+            saveButton.click();
         } else {
             guardNoRequest(saveButton).click();
         }
