@@ -21,6 +21,8 @@ import io.swagger.jaxrs.config.BeanConfig;
 import org.jboss.quickstarts.wfk.contact.ContactRestService;
 import org.jboss.quickstarts.wfk.util.JacksonConfig;
 import org.jboss.quickstarts.wfk.util.RestServiceExceptionHandler;
+import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -43,12 +45,16 @@ public class ContactServiceApplication extends Application {
         BeanConfig beanConfig = new BeanConfig();
         beanConfig.setVersion("0.1.0");
         beanConfig.setSchemes(new String[]{"http"});
+        //Modify when you deploy to Openshift
         beanConfig.setHost("localhost:8080/jboss-contacts-swagger");
         beanConfig.setBasePath("/api");
         //Add additional RESTService containing packages here, separated by commas:
         // "org.jboss.quickstarts.wfk.contact, org.jboss.quickstarts.wfk.other"
         beanConfig.setResourcePackage("org.jboss.quickstarts.wfk.contact");
         beanConfig.setScan(true);
+
+        //Do not edit below
+        RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
     }
 
     @Override

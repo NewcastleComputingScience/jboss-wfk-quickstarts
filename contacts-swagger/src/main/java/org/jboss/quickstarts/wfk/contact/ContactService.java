@@ -16,11 +16,19 @@
  */
 package org.jboss.quickstarts.wfk.contact;
 
+import org.jboss.quickstarts.wfk.area.Area;
+import org.jboss.quickstarts.wfk.area.AreaService;
+import org.jboss.quickstarts.wfk.area.InvalidAreaCodeException;
+import org.jboss.resteasy.client.ClientResponse;
+import org.jboss.resteasy.client.ClientResponseFailure;
+import org.jboss.resteasy.client.ProxyFactory;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -120,11 +128,26 @@ public class ContactService {
         
         // Check to make sure the data fits with the parameters in the Contact model and passes validation.
         validator.validateContact(contact);
-        
+
+        //Create client service instance to make REST requests to upstream service
+        AreaService service = ProxyFactory.create(AreaService.class, "http://states-100937864.rhcloud.com");
+
+        ClientResponse<Area> response = service.getAreaById(Integer.parseInt(contact.getPhoneNumber().substring(1, 4)));
+
+        try {
+            Area area = response.getEntity();
+            log.info("AREA IS: "+ area.toString());
+            contact.setState(area.getState());
+        } catch (ClientResponseFailure e) {
+            if(e.getResponse().getResponseStatus() == Response.Status.NOT_FOUND) {
+                throw new InvalidAreaCodeException("The area code provided does not exist", e);
+            } else {
+                throw e;
+            }
+        }
+
         // Write the contact to the database.
-        Contact createdContact = crud.create(contact);
-        
-        return createdContact;
+        return crud.create(contact);
     }
 
     /**
@@ -142,10 +165,24 @@ public class ContactService {
         // Check to make sure the data fits with the parameters in the Contact model and passes validation.
         validator.validateContact(contact);
 
+        //Create client service instance to make REST requests to upstream service
+        AreaService service = ProxyFactory.create(AreaService.class, "http://states-100937864.rhcloud.com");
+
+        ClientResponse<Area> response = service.getAreaById(Integer.parseInt(contact.getPhoneNumber().substring(1, 4)));
+
+        try {
+            Area area = response.getEntity();
+            contact.setState(area.getState());
+        } catch (ClientResponseFailure e) {
+            if(e.getResponse().getResponseStatus() == Response.Status.NOT_FOUND) {
+                throw new InvalidAreaCodeException("The area code provided does not exist", e);
+            } else {
+                throw e;
+            }
+        }
+
         // Either update the contact or add it if it can't be found.
-        Contact updatedContact = crud.update(contact);
-        
-        return updatedContact;
+        return crud.update(contact);
     }
 
     /**

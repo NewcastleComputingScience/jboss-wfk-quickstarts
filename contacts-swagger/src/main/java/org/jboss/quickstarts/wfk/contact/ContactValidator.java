@@ -63,7 +63,7 @@ public class ContactValidator {
 
         // Check the uniqueness of the email address
         if (emailAlreadyExists(contact.getEmail(), contact.getId())) {
-            throw new ValidationException("Unique Email Violation");
+            throw new UniqueEmailException("Unique Email Violation");
         }
     }
 

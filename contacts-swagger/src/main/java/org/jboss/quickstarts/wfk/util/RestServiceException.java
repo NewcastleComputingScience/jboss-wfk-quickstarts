@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.quickstarts.wfk.exception;
+package org.jboss.quickstarts.wfk.util;
 
+import javax.ejb.ApplicationException;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import java.util.Map;
  * @author hugofirth
  * @see org.jboss.quickstarts.wfk.util.RestServiceExceptionHandler
  */
+@ApplicationException(rollback = true)
 public class RestServiceException extends RuntimeException implements
         Serializable {
 

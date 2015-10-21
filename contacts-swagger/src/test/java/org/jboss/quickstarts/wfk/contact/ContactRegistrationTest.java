@@ -16,12 +16,8 @@
  */
 package org.jboss.quickstarts.wfk.contact;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.File;
 import java.util.Date;
-import java.util.Map;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,6 +25,7 @@ import javax.ws.rs.core.Response;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
+import org.jboss.quickstarts.wfk.util.RestServiceException;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -36,6 +33,8 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.*;
 
 /**
  * <p>A suite of tests, run with {@link org.jboss.arquillian Arquillian} to test the JAX-RS endpoint for
@@ -61,8 +60,6 @@ public class ContactRegistrationTest {
     public static Archive<?> createTestArchive() {
         //HttpComponents and org.JSON are required by ContactService
         File[] libs = Maven.resolver().loadPomFromFile("pom.xml").resolve(
-                "org.apache.httpcomponents:httpclient:4.3.2",
-                "org.json:json:20140107",
                 "org.codehaus.jackson:jackson-core-asl:1.9.9",
                 "org.codehaus.jackson:jackson-mapper-asl:1.9.9",
                 "org.codehaus.jackson:jackson-jaxrs:1.9.9"
@@ -101,15 +98,18 @@ public class ContactRegistrationTest {
     @SuppressWarnings("unchecked")
     @Test
     @InSequence(2)
-    public void testInvalidRegister() throws Exception {
+    public void testInvalidRegister() {
         Contact contact = createContactInstance("", "", "", "", date);
-        Response response = contactRestService.createContact(contact);
 
-        assertEquals("Unexpected response status", 400, response.getStatus());
-        assertNotNull("response.getEntity() should not be null", response.getEntity());
-        assertEquals("Unexpected response.getEntity(). It contains " + response.getEntity(), 4,
-                ((Map<String, String>) response.getEntity()).size());
-        log.info("Invalid contact register attempt failed with return code " + response.getStatus());
+        try {
+            contactRestService.createContact(contact);
+            fail("Expected a RestServiceException to be thrown");
+        } catch(RestServiceException e) {
+            assertEquals("Unexpected response status", Response.Status.BAD_REQUEST, e.getStatus());
+            assertEquals("Unexpected response body", 4, e.getReasons().size());
+            log.info("Invalid contact register attempt failed with return code " + e.getStatus());
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -122,13 +122,17 @@ public class ContactRegistrationTest {
 
         // Register a different user with the same email
         Contact anotherContact = createContactInstance("John", "Doe", "jane@mailinator.com", "(213) 355-1234", date);
-        Response response = contactRestService.createContact(anotherContact);
 
-        assertEquals("Unexpected response status", 409, response.getStatus());
-        assertNotNull("response.getEntity() should not be null", response.getEntity());
-        assertEquals("Unexpected response.getEntity(). It contains" + response.getEntity(), 1,
-                ((Map<String, String>) response.getEntity()).size());
-        log.info("Duplicate contact register attempt failed with return code " + response.getStatus());
+        try {
+            contactRestService.createContact(anotherContact);
+            fail("Expected a RestServiceException to be thrown");
+        } catch(RestServiceException e) {
+            assertEquals("Unexpected response status", Response.Status.CONFLICT, e.getStatus());
+            assertTrue("Unexecpted error. Should be Unique email violation", e.getCause() instanceof UniqueEmailException);
+            assertEquals("Unexpected response body", 1, e.getReasons().size());
+            log.info("Duplicate contact register attempt failed with return code " + e.getStatus());
+        }
+
     }
 
     /**

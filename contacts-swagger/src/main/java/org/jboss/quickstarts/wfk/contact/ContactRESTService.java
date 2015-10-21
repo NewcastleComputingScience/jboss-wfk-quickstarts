@@ -17,7 +17,8 @@
 package org.jboss.quickstarts.wfk.contact;
 
 import io.swagger.annotations.*;
-import org.jboss.quickstarts.wfk.exception.RestServiceException;
+import org.jboss.quickstarts.wfk.area.InvalidAreaCodeException;
+import org.jboss.quickstarts.wfk.util.RestServiceException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -32,7 +33,6 @@ import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -187,11 +187,15 @@ public class ContactRestService {
             }
             throw new RestServiceException("Bad Request", responseObj, Response.Status.BAD_REQUEST, ce);
 
-        } catch (ValidationException e) {
+        } catch (UniqueEmailException e) {
             // Handle the unique constraint violation
             Map<String, String> responseObj = new HashMap<>();
             responseObj.put("email", "That email is already used, please use a unique email");
             throw new RestServiceException("Bad Request", responseObj, Response.Status.CONFLICT, e);
+        } catch (InvalidAreaCodeException e) {
+            Map<String, String> responseObj = new HashMap<>();
+            responseObj.put("area_code", "The telephone area code provided is not recognised, please provide another");
+            throw new RestServiceException("Bad Request", responseObj, Response.Status.BAD_REQUEST, e);
         } catch (Exception e) {
             // Handle generic exceptions
             throw new RestServiceException(e);
@@ -262,12 +266,16 @@ public class ContactRestService {
                 responseObj.put(violation.getPropertyPath().toString(), violation.getMessage());
             }
             throw new RestServiceException("Bad Request", responseObj, Response.Status.BAD_REQUEST, ce);
-        } catch (ValidationException e) {
+        } catch (UniqueEmailException e) {
             // Handle the unique constraint violation
             Map<String, String> responseObj = new HashMap<>();
             responseObj.put("email", "That email is already used, please use a unique email");
             throw new RestServiceException("Contact details supplied in request body conflict with another Contact",
                     responseObj, Response.Status.CONFLICT, e);
+        } catch (InvalidAreaCodeException e) {
+            Map<String, String> responseObj = new HashMap<>();
+            responseObj.put("area_code", "The telephone area code provided is not recognised, please provide another");
+            throw new RestServiceException("Bad Request", responseObj, Response.Status.BAD_REQUEST, e);
         } catch (Exception e) {
             // Handle generic exceptions
             throw new RestServiceException(e);

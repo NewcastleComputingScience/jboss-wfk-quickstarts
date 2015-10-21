@@ -16,8 +16,6 @@
  */
 package org.jboss.quickstarts.wfk.util;
 
-import org.jboss.quickstarts.wfk.exception.RestServiceException;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.Context;
