@@ -19,6 +19,7 @@ package org.jboss.quickstarts.wfk.contact;
 import io.swagger.annotations.*;
 import org.jboss.quickstarts.wfk.area.InvalidAreaCodeException;
 import org.jboss.quickstarts.wfk.util.RestServiceException;
+import org.jboss.resteasy.annotations.cache.Cache;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,12 +69,47 @@ public class ContactRestService {
     /**
      * <p>Return all the Contacts.  They are sorted alphabetically by name.</p>
      *
+     * <p>The url may optionally include query parameters specifying a Contact's name</p>
+     *
+     * <p>Examples: <pre>GET api/contacts?firstname=John</pre>, <pre>GET api/contacts?firstname=John&lastname=Smith</pre></p>
+     *
      * @return A Response containing a list of Contacts
      */
     @GET
     @ApiOperation(value = "Fetch all Contacts", notes = "Returns a JSON array of all stored Contact objects.")
-    public Response retrieveAllContacts() {
-        List<Contact> contacts = service.findAllOrderedByName();
+    public Response retrieveAllContacts(@QueryParam("firstname") String firstname, @QueryParam("lastname") String lastname) {
+        //Create an empty collection to contain the intersection of Contacts to be returned
+        List<Contact> contacts;
+
+        if(firstname == null && lastname == null) {
+            contacts = service.findAllOrderedByName();
+        } else if(lastname == null) {
+            try {
+                contacts = service.findAllByFirstName(firstname);
+            } catch(NoResultException e) {
+                // Verify that a contact exists with the firstname. Return 404, if not present.
+                throw new RestServiceException("No Contact with the firstname " + firstname + " was found!",
+                        Response.Status.NOT_FOUND);
+            }
+        } else if(firstname == null) {
+            try {
+                contacts = service.findAllByLastName(lastname);
+            } catch(NoResultException e) {
+                // Verify that a contact exists with the firstname. Return 404, if not present.
+                throw new RestServiceException("No Contact with the lastname " + lastname + " was found!",
+                        Response.Status.NOT_FOUND);
+            }
+        } else {
+            try {
+                contacts = service.findAllByFirstName(firstname);
+                contacts.retainAll(service.findAllByLastName(lastname));
+            } catch(NoResultException e) {
+                // Verify that a contact exists with the firstname. Return 404, if not present.
+                throw new RestServiceException("No Contact with the name " + firstname + " " + lastname + " was found!",
+                        Response.Status.NOT_FOUND);
+            }
+        }
+
         return Response.ok(contacts).build();
     }
 
@@ -87,6 +124,7 @@ public class ContactRestService {
      * @return A Response containing a single Contact
      */
     @GET
+    @Cache
     @Path("/{email:^.+[%40|@].+$}")
     @ApiOperation(
             value = "Fetch a Contact by Email",
@@ -118,6 +156,7 @@ public class ContactRestService {
      * @return A Response containing a single Contact
      */
     @GET
+    @Cache
     @Path("/{id:[0-9]+}")
     @ApiOperation(
             value = "Fetch a Contact by id",

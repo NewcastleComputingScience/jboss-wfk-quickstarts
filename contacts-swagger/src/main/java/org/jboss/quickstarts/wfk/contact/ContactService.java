@@ -93,25 +93,21 @@ public class ContactService {
     /**
      * <p>Returns a single Contact object, specified by a String firstName.<p/>
      *
-     * <p>If there is more then one, only the first will be returned.<p/>
-     *
      * @param firstName The firstName field of the Contact to be returned
      * @return The first Contact with the specified firstName
      */
-    Contact findByFirstName(String firstName) {
-        return crud.findByFirstName(firstName);
+    List<Contact> findAllByFirstName(String firstName) {
+        return crud.findAllByFirstName(firstName);
     }
 
     /**
      * <p>Returns a single Contact object, specified by a String lastName.<p/>
      *
-     * <p>If there is more then one, only the first will be returned.<p/>
-     *
-     * @param lastName The lastName field of the Contact to be returned
-     * @return The first Contact with the specified lastName
+     * @param lastName The lastName field of the Contacts to be returned
+     * @return The Contacts with the specified lastName
      */
-    Contact findByLastName(String lastName) {
-        return crud.findByFirstName(lastName);
+    List<Contact> findAllByLastName(String lastName) {
+        return crud.findAllByFirstName(lastName);
     }
 
     /**
@@ -136,7 +132,6 @@ public class ContactService {
 
         try {
             Area area = response.getEntity();
-            log.info("AREA IS: "+ area.toString());
             contact.setState(area.getState());
         } catch (ClientResponseFailure e) {
             if(e.getResponse().getResponseStatus() == Response.Status.NOT_FOUND) {

@@ -81,39 +81,35 @@ public class ContactRepository {
     }
 
     /**
-     * <p>Returns a single Contact object, specified by a String firstName.<p/>
+     * <p>Returns a list of Contact objects, specified by a String firstName.<p/>
      *
-     * <p>If there is more then one, only the first will be returned.<p/>
-     *
-     * @param firstName The firstName field of the Contact to be returned
-     * @return The first Contact with the specified firstName
+     * @param firstName The firstName field of the Contacts to be returned
+     * @return The Contacts with the specified firstName
      */
-    Contact findByFirstName(String firstName) {
+    List<Contact> findAllByFirstName(String firstName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Contact> criteria = cb.createQuery(Contact.class);
         Root<Contact> contact = criteria.from(Contact.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new feature in JPA 2.0.
         // criteria.select(contact).where(cb.equal(contact.get(Contact_.firstName), firstName));
         criteria.select(contact).where(cb.equal(contact.get("firstName"), firstName));
-        return em.createQuery(criteria).getSingleResult();
+        return em.createQuery(criteria).getResultList();
     }
 
     /**
      * <p>Returns a single Contact object, specified by a String lastName.<p/>
      *
-     * <p>If there is more then one, only the first will be returned.<p/>
-     *
-     * @param lastName The lastName field of the Contact to be returned
-     * @return The first Contact with the specified lastName
+     * @param lastName The lastName field of the Contacts to be returned
+     * @return The Contacts with the specified lastName
      */
-    Contact findByLastName(String lastName) {
+    List<Contact> findAllByLastName(String lastName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Contact> criteria = cb.createQuery(Contact.class);
         Root<Contact> contact = criteria.from(Contact.class);
         // Swap criteria statements if you would like to try out type-safe criteria queries, a new feature in JPA 2.0.
         // criteria.select(contact).where(cb.equal(contact.get(Contact_.lastName), lastName));
         criteria.select(contact).where(cb.equal(contact.get("lastName"), lastName));
-        return em.createQuery(criteria).getSingleResult();
+        return em.createQuery(criteria).getResultList();
     }
 
     /**
