@@ -5,7 +5,6 @@ Summary: The quickstarts demonstrate Java EE 6 and a few additional technologies
 Introduction
 ------------
 
-
 These quickstarts run on Red Hat JBoss Enterprise Application Platform 6.1 or later with the Red Hat JBoss Web Framework Kit. We recommend using the JBoss EAP ZIP file. This version uses the correct dependencies and ensures you test and compile against your runtime environment. 
 
 Be sure to read this entire document before you attempt to work with the quickstarts. It contains the following information:
@@ -205,7 +204,7 @@ _Note:_ The following variables are used in these instructions. Be sure to repla
 
 If you do not yet have an OpenShift account and domain, [Sign in to OpenShift](https://openshift.redhat.com/app/login) to create the account and domain. 
 
-[Get Started with OpenShift](https://openshift.redhat.com/app/getting_started) details how to install the OpenShift Express command line interface.
+If you have an account already, you must sign in and create a domain [here](https://openshift.redhat.com/app/console/domains/new). We do ask that you use your allocated service number, found [here](https://github.com/NewcastleComputingScience/csc8104-assignment) (e.g. 810401), as your domain.
 
 ### Create the OpenShift Application
 
@@ -213,7 +212,7 @@ Open a shell command prompt and change to a directory of your choice. Enter the 
 
     rhc app create -a APPLICATION_NAME -t jbosseap-6
 
-_NOTE_: The domain name for this application will be APPLICATION_NAME-YOUR_DOMAIN_NAME.rhcloud.com`. Be sure to replace the variables as noted above.
+_NOTE_: The domain name for this application will be APPLICATION_NAME-YOUR_DOMAIN_NAME.rhcloud.com. Be sure to replace the variables as noted above.
 
 This command creates an OpenShift application named APPLICATION_NAME and will run the application inside the `jbosseap-6`  container. You should see some output similar to the following:
 
