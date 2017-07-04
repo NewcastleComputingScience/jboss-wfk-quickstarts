@@ -1,301 +1,164 @@
-Red Hat JBoss Web Framework Kit (WFK) Quickstarts
-====================
-Summary: The quickstarts demonstrate Java EE 6 and a few additional technologies from the JBoss stack. They provide small, specific, working examples that can be used as a reference for your own project.
+contacts-swagger: Documented CRUD REST API example, Swagger and JAX-RS
+======================================================================
+Author: Hugo Firth
+Level: Beginner
+Technologies: Swagger, REST
+Summary: The `contacts-swagger` quickstart demonstrates a Java EE 6 mobile database REST service using Swagger, JAX-RS, 
+JPA 2.0, and REST.
+Target Product: WFK
+Product Versions: EAP 6.3, WFK 2.7  
+Source: <https://github.com/jboss-developer/jboss-wfk-quickstarts>
 
-Introduction
-------------
+What is it?
+-----------
 
-These quickstarts run on Red Hat JBoss Enterprise Application Platform 6.1 or later with the Red Hat JBoss Web Framework Kit. We recommend using the JBoss EAP ZIP file. This version uses the correct dependencies and ensures you test and compile against your runtime environment. 
+The `contact-swagger` quickstart is a deployable Maven 3 project designed to help you get your foot in the door 
+developing REST APIs with Java EE 6 in Red Hat JBoss Enterprise Application Platform. This project is setup to allow 
+you to create a basic Java EE 6 service using Swagger, JAX-RS, CDI 1.0, EJB 3.1, JPA 2.0, Bean Validation 1.0 and 
+JUnit. It includes a persistence unit and some sample persistence and transaction code to help you get your feet wet with 
+database access in enterprise Java.
 
-Be sure to read this entire document before you attempt to work with the quickstarts. It contains the following information:
+This service is built using a RESTful approach; i.e. clients should interacts with with the application server via 
+restful end-points (declared using JAX-RS). This application also provides vital unit tests for the contacts service. 
+As documentation is so important when designing APIs for use by others, we include the necessary annotations to 
+generate example interactive documentation using the popular [Swagger](http://swagger.io) tool.
 
-* [Available Quickstarts](#available-quickstarts): List of the available quickstarts and details about each one.
+This application focuses on **CRUD** operations against a single resource (mobile contacts). The user will have the 
+ability to:
 
-* [Suggested Approach to the Quickstarts](#suggested-approach-to-the-quickstarts): A suggested approach on how to work with the quickstarts.
+* **Create** a new contact.
 
-* [System Requirements](#system-requirements): List of software required to run the quickstarts.
+* **Read** a list of contacts.
 
-* [Configure Maven](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/CONFIGURE_MAVEN.md#configure-maven-to-build-and-deploy-the-quickstarts): How to configure the Maven repository for use by the quickstarts.
+* **Update** an existing contact.
 
-* [Run the Quickstarts](#run-the-quickstarts): General instructions for building, deploying, and running the quickstarts.
+* **Delete** a contact.
 
-* [Run the Arquillian Tests](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/RUN_ARQUILLIAN_TESTS.md#run-the-arquillian-tests): How to run the Arquillian tests provided by some of the quickstarts.
-
-* [Build and Deploy the Quickstart - to OpenShift](#build-and-deploy-the-quickstart-to-openshift): Deploy the application to OpenShift
-
-* [Optional Components](#optional-components): How to install and configure optional components required by some of the quickstarts.
-
-* [Contributing Guide](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/CONTRIBUTING.md#jboss-developer-contributing-guide): This document contains information targeted for developers who want to contribute to JBoss developer projects.
-
-Use of EAP_HOME and JBOSS_HOME Variables
----------------------------------
-
-The quickstart README files use the *replaceable* value `EAP_HOME` to denote the path to the JBoss EAP 6 installation. When you encounter this value in a README file, be sure to replace it with the actual path to your JBoss EAP 6 installation. 
-
-* If you installed JBoss EAP using the ZIP, the install directory is the path you specified when you ran the command.
-
-* If you installed JBoss EAP using the RPM, the install directory is `/var/lib/jbossas/`.
-
-* If you used the installer to install JBoss EAP, the default path for `EAP_HOME` is `${user.home}/EAP-6.3.0`. 
-
-        For Linux: /home/USER_NAME/EAP-6.3.0/
-        For Windows: "C:\Users\USER_NAME\EAP-6.3.0\"
-
-* If you used the JBoss Developer Studio installer to install and configure the JBoss EAP Server, the default path for `EAP_HOME` is `${user.home}/jbdevstudio/runtimes/jboss-eap`.
-
-        For Linux: /home/USER_NAME/jbdevstudio/runtimes/jboss-eap/
-        For Windows: "C:\Users\USER_NAME\jbdevstudio\runtimes\jboss-eap" or "C:\Documents and Settings\USER_NAME\jbdevstudio\runtimes\jboss-eap\" 
-
-The `JBOSS_HOME` *environment* variable, which is used in scripts, continues to work as it has in the past.
-
-Available Quickstarts
----------------------
-
-All available quickstarts can be found here: <http://site-jdf.rhcloud.com/quickstarts/get-started/>. You can filter by the quickstart name, the product, and the technologies demonstrated by the quickstart. You can also limit the results based on skill level and date published. The resulting page provides a brief description of each matching quickstart, the skill level, and the technologies used. Click on the quickstart to see more detailed information about how to run it. Some quickstarts require deployment of other quickstarts. This information is noted in the `Prerequisites` section of the quickstart README file.
-
-Some quickstarts are designed to enhance or extend other quickstarts. These are noted in the **Prerequisites** column. If a quickstart lists prerequisites, those must be installed or deployed before working with the quickstart.
-
-_Note:_ The quickstart README files use the replaceable value `EAP_HOME` to denote the path to the JBoss EAP 6 installation. When you encounter this value in a README file, be sure to replace it with the actual path to your JBoss EAP 6 installation. The 'JBOSS_HOME' environment variable, which is used in scripts, continues to work as it has in the past.
-
-[TOC-quickstart]
-
-Suggested Approach to the Quickstarts
--------------------------------------
-
-We suggest you approach the quickstarts as follows:
-
-* Regardless of your level of expertise, we suggest you start with the **helloworld-html5** quickstart. It is the simplest example and is an easy way to prove your server is configured and started correctly.
-* If you are a beginner or new to JBoss, start with the quickstarts labeled **Beginner**, then try those marked as **Intermediate**. When you are comfortable with those, move on to the **Advanced** quickstarts.
-* Some quickstarts are based upon other quickstarts but have expanded capabilities and functionality. If a prerequisite quickstart is listed, be sure to deploy and test it before looking at the expanded version.
+_Note: This quickstart uses the Jackson libraries, which are not supported for development or production use in JBoss EAP. 
+For more information, see [JBoss Enterprise Application Platform Component Details](https://access.redhat.com/articles/112673) 
+and [Does JBoss EAP support the use of Jackson libraries?](https://access.redhat.com/articles/1265083)._
 
 
-System Requirements
+System requirements
 -------------------
 
-The application this project produces is designed to be run on Red Hat JBoss Enterprise Application Platform (JBoss EAP) 6.1 or later with the  Red Hat JBoss Web Framework Kit (WFK) 2.7.
+The application this project produces is designed to be run on Red Hat JBoss Enterprise Application Platform (JBoss EAP) 
+6.3 or later with the Red Hat JBoss Web Framework Kit (WFK) 2.7.
 
-To run these quickstarts with the provided build scripts, you need the following:
+All you need to build this project is Java 7.0 (Java SDK 1.7) or later, and Maven 3.0 or later.
 
-1. Java 1.6, to run JBoss AS and Maven. You can choose from the following:
-    * OpenJDK
-    * Oracle Java SE
-    * Oracle JRockit
-
-2. Maven 3.0.0 or later, to build and deploy the examples
-    * If you have not yet installed Maven, see the [Maven Getting Started Guide](http://maven.apache.org/guides/getting-started/index.html) for details.
-    * If you have installed Maven, you can check the version by typing the following in a command line:
-
-            mvn --version 
-
-3. The JBoss EAP distribution ZIP.
-    * For information on how to install and run JBoss, refer to the product documentation.
-
-4. You can also use [JBoss Developer Studio or Eclipse](#use-jboss-developer-studio-or-eclipse-to-run-the-quickstarts) to run the quickstarts. 
+An HTML5 compatible browser such as Chrome, Safari 5+, Firefox 5+, or IE 9+ is required to view the Swagger 
+documentation.
+ 
+With the prerequisites out of the way, you're ready to build and deploy.
 
 
-Run the Quickstarts
--------------------
+Configure Maven
+---------------
 
-The root folder of each individual quickstart contains a README file with specific details on how to build and run the example. In most cases you do the following:
+_This section of the tutorial only applies to students working on **their own** machines, not those provided by the university!_
 
-* [Start the JBoss EAP Server](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/START_JBOSS_EAP.md#start-the-jboss-eap-server)
-* [Build and deploy the quickstarts](#build-and-deploy-the-quickstarts)
-
-
-### Build and Deploy the Quickstarts
-
-See the README file in each individual quickstart folder for specific details and information on how to run and access the example.
-
-_Note:_ If you do not configure the Maven settings as described here, [Configure Maven](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/CONFIGURE_MAVEN.md#configure-maven-to-build-and-deploy-the-quickstarts), you must pass the configuration setting on every Maven command as follows: ` -s QUICKSTART_HOME/settings.xml`
+If you have not yet done so, you must [Configure Maven](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/CONFIGURE_MAVEN.md#configure-maven-to-build-and-deploy-the-quickstarts) before testing the quickstarts.
 
 
-#### Build the Quickstart Archive
+Start the JBoss EAP Server
+-----------------------
 
-In most cases, you can use the following steps to build the application to test for compile errors or to view the contents of the archive. See the specific quickstart README file for complete details.
+_This section applies to **all students**!_
 
-1. Open a command prompt and navigate to the root directory of the quickstart you want to build.
-2. Use this command if you only want to build the archive, but not deploy it:
-   * If you have configured the Maven settings :
+####If you on your own machine
 
-            mvn clean install
-   * If you have NOT configured settings Maven settings:
+1. Open a command line and navigate to the root of the JBoss EAP directory.
+2. The following shows the command line to start the server with the default profile:
 
-            mvn clean install -s QUICKSTART_HOME/settings.xml
+        For Linux:   EAP_HOME/bin/standalone.sh
+        For Windows: EAP_HOME\bin\standalone.bat
 
-#### Build and Deploy the Quickstart Archive
+   Note: Adding "-b 0.0.0.0" to the above commands will allow external clients (phones, tablets, desktops, etc...) 
+   connect through your local network.
 
-In most cases, you can use the following steps to build and deploy the application. See the specific quickstart README file for complete details.
+   For example
 
-1. Make sure you start the JBoss EAP server as described in the quickstart README file.
-2. Open a command prompt and navigate to the root directory of the quickstart you want to run.
-3. Use this command to build and deploy the archive:
+        For Linux:   EAP_HOME/bin/standalone.sh -b 0.0.0.0
+        For Windows: EAP_HOME\bin\standalone.bat -b 0.0.0.0
 
-   * If you have configured the Maven settings :
+####If you are on a university machine
 
-            mvn clean install jboss-as:deploy
-   * If you have NOT configured the Maven settings :
+Open the **CS Portable Apps** menu in the System tray and select the following:
 
-            mvn clean install jboss-as:deploy -s QUICKSTART_HOME/settings.xml
+	Programming > Java > JBoss > Start Server 
 
-#### Undeploy an Archive
+This will start the JBoss server with the default profile. It will also launch a new `cmd.exe` window containing logging output from the server. Closing this cmd window will stop the server. 
 
-The command to undeploy the quickstart is simply: 
+Build and Deploy the Quickstart
+-------------------------------
+
+_This section applies to **all students**!_
+
+1. Make sure you have started the JBoss EAP server as described above.
+2. Open a command line and navigate to the root directory of this quickstart.
+3. Type this command to build and deploy the archive:
+
+        mvn clean package jboss-as:deploy
+
+4. This compiles and packages the project into the archive `target/jboss-contacts-swagger.war`, then deploys it to the running instance of the server.
+
+**NOTE:** The `mvn` command, when run for the first time, will cache all the dependencies of the quickstart project on your local machine. This involves a large number of downloads and may take a number of minutes.
+
+Access the application
+----------------------
+
+_This section applies to **all students**!_
+
+Once you have deployed your Contacts service to your local JBoss server (following the steps above), you can access the API endpoints under the following base URL: <http://localhost:8080/jboss-contacts-swagger/api/*>.
+Access the documentation of the APIs endpoints in a browser at the top-level URL: <http://localhost:8080/jboss-contacts-swagger/>.
+
+Undeploy the Archive
+--------------------
+
+_This section applies to **all students**!_
+
+1. Make sure you have started the JBoss EAP server as described above.
+2. Open a command line and navigate to the root directory of this quickstart.
+3. When you are finished testing, type this command to undeploy the archive:
 
         mvn jboss-as:undeploy
- 
-### Verify the Quickstarts Build with One Command
--------------------------------------------------
 
-You can verify the quickstarts build using one command.
+Deploying to OpenShift
+----------------------
 
-To build the quickstarts:
+_This section applies to **all students**!_
 
-1. Do not start the JBoss EAP server.
-2. Open a command prompt and navigate to the root directory of the quickstarts.
-3. Use this command to build the quickstarts:
+You can also deploy the application directly to OpenShift, Red Hat's cloud based PaaS offering, follow the instructions [here](https://github.com/NewcastleComputingScience/jboss-wfk-quickstarts/tree/v2.7.0%2BNCL201617-RC1#build-and-deploy-the-quickstart---to-openshift)
 
-   * If you have configured the Maven settings :
+Run the Arquillian tests
+------------------------
 
-            mvn clean install
+_This section applies to **all students**!_
 
-   * If you have NOT configured the Maven settings :
+By default, tests are configured to be skipped. The reason is that the sample test is an Arquillian test, which requires the use of a container. You can activate this test by selecting one of the container configurations provided  for JBoss.
 
-            mvn clean install -s QUICKSTART_HOME/settings.xml
+To run the test in JBoss, first start the server. Then, execute the following `mvn` command froma `cmd.exe` window in the quickstart directoy:
 
-_Note_: If you see a `java.lang.OutOfMemoryError: PermGen space` error when you run this command, increase the memory by typing the following command for your operating system, then try the above command again.
+    mvn clean test -Parq-jbossas-remote
 
-        For Linux:   export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=128m"
-        For Windows: SET MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=128m"
+This will run the test goal with the correct configuration activated.
 
+Import the Project into an IDE
+------------------------------
 
-### Undeploy the Deployed Quickstarts with One Command
-------------------------------------------------------
+If you created the project using the Maven archetype wizard in your IDE (Eclipse, NetBeans or IntelliJ IDEA), then there 
+is nothing to do. You should already have an IDE project.
 
-To undeploy the quickstarts from the root of the quickstart folder, you must pass the argument `-fae` (fail at end) on the command line. This allows the command to continue past quickstarts that fail due to complex dependencies and quickstarts that only have Arquillian tests and do not deploy archives to the server.
+If you created the project from the command line using archetype:generate, then you need to import the project into your IDE. 
+If you are using NetBeans 6.8 or IntelliJ IDEA 9, then all you have to do is open the project as an existing project. 
+Both of these IDEs recognize Maven projects natively.
 
-You can undeploy quickstarts using the following procedure:
+Debug the Application
+---------------------
 
-1. Start the JBoss EAP server.
-2. Open a command line and navigate to the root directory of the quickstarts.
-3. Use this command to undeploy any deployed quickstarts:
+If you want to be able to debug into the source code or look at the Javadocs of any library in the project, you can run 
+either of the following two commands to pull them into your local repository. The IDE should then detect them.
 
-            mvn jboss-as:undeploy -fae
-
-To undeploy any quickstarts that fail due to complex dependencies, follow the undeploy procedure described in the quickstart's README file.
-
-
-Run the Quickstart in Red Hat JBoss Developer Studio or Eclipse
--------------------------------------
-You can also start the server and deploy the quickstarts or run the Arquillian tests from Eclipse using JBoss tools. For more information, see [Use JBoss Developer Studio or Eclipse to Run the Quickstarts](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/USE_JBDS.md#use-jboss-developer-studio-or-eclipse-to-run-the-quickstarts) 
-
-
-
-Build and Deploy the Quickstart - to OpenShift
--------------------------
-
-_Note:_ The following variables are used in these instructions. Be sure to replace them as follows:
- 
-* QUICKSTART_NAME should be replaced with your quickstart name, for example:  my-quickstart
-* YOUR_DOMAIN_NAME should be replaced with your OpenShift account user name.
-* APPLICATION_NAME should be replaced with a variation of the quickstart name, for example: myquickstart
-* APPLICATION_UUID should be replaced with the UUID generated by OpenShift for your application, for example: 52864af85973ca430200006f
- 
-### Create an OpenShift Account and Domain
-
-If you do not yet have an OpenShift account and domain, [Sign in to OpenShift](https://openshift.redhat.com/app/login) to create the account and domain. 
-
-If you have an account already, you must sign in and create a domain [here](https://openshift.redhat.com/app/console/domains/new). We do ask that you use your allocated service number, found [here](https://github.com/NewcastleComputingScience/csc8104-assignment) (e.g. 810401), as your domain.
-
-### Create the OpenShift Application
-
-Open a shell command prompt and change to a directory of your choice. Enter the following command to create a JBoss EAP 6 application:
-
-    rhc app create -a APPLICATION_NAME -t jbosseap-6
-
-_NOTE_: The domain name for this application will be APPLICATION_NAME-YOUR_DOMAIN_NAME.rhcloud.com. Be sure to replace the variables as noted above.
-
-This command creates an OpenShift application named APPLICATION_NAME and will run the application inside the `jbosseap-6`  container. You should see some output similar to the following:
-
-    Application Options
-    -------------------
-      Namespace:  YOUR_DOMAIN_NAME
-      Cartridges: jbosseap-6 (addtl. costs may apply)
-      Gear Size:  default
-      Scaling:    no
-
-    Creating application 'APPLICATION_NAME' ... done
-
-    Waiting for your DNS name to be available ... done
-
-    Cloning into 'APPLICATION_NAME'...
-    Warning: Permanently added the RSA host key for IP address '54.237.58.0' to the list of known hosts.
-
-    Your application 'APPLICATION_NAME' is now available.
-
-      URL:        http://APPLICATION_NAME-YOUR_DOMAIN_NAME.rhcloud.com/
-      SSH to:     APPLICATION_UUID@APPLICATION_NAME-YOUR_DOMAIN_NAME.rhcloud.com
-      Git remote: ssh://APPLICATION_UUID@APPLICATION_NAME-YOUR_DOMAIN_NAME.rhcloud.com/~/git/APPLICATION_NAME.git/
-      Cloned to:  CURRENT_DIRECTORY/APPLICATION_NAME
-
-    Run 'rhc show-app APPLICATION_NAME' for more details about your app.
-
-The create command creates a git repository in the current directory with the same name as the application. 
-
-Notice that the output also reports the URL at which the application can be accessed. Make sure it is available by typing the published url into a browser or use command line tools such as curl or wget. Be sure to replace `APPLICATION_NAME` and `YOUR_DOMAIN_NAME` with your OpenShift application and account domain name.
-
-
-### Migrate the Quickstart Source
-
-Now that you have confirmed it is working you can migrate the quickstart source. You do not need the generated default application, so navigate to the new git repository directory created by the OpenShift command and tell git to remove the source and pom files:
-
-    cd APPLICATION_NAME
-    git rm -r src pom.xml
-
-Copy the source for the QUICKSTART_NAME quickstart into this new git repository:
-
-    cp -r QUICKSTART_HOME/QUICKSTART_NAME/src .
-    cp QUICKSTART_HOME/QUICKSTART_NAME/pom.xml .
-
-### Configure the OpenShift Server
-
-See individual quickstart README file for any specific server configuration requiremens.
-
-### Deploy the OpenShift Application
-
-You can now deploy the changes to your OpenShift application using git as follows:
-
-    git add src pom.xml
-    git commit -m "QUICKSTART_NAME quickstart on OpenShift"
-    git push
-
-The final push command triggers the OpenShift infrastructure to build and deploy the changes. 
-
-Note that the `openshift` profile in `pom.xml` is activated by OpenShift, and causes the WAR build by OpenShift to be copied to the `deployments/` directory, and deployed without a context path.
-
-### Test the OpenShift Application
-
-When the push command returns, you can test the application by getting the following URL either via a browser or using tools such as curl or wget. Be sure to replace the `APPLICATION_NAME` and `YOUR_DOMAIN_NAME` variables in the URL with your OpenShift application and account domain name.
-
-* <http://APPLICATION_NAME-YOUR_DOMAIN_NAME.rhcloud.com/> 
-
-You can use the OpenShift command line tools or the OpenShift web console to discover and control the application.
-
-### Delete the OpenShift Application
-
-When you are finished with the application you can delete it as follows:
-
-    rhc app-delete -a APPLICATION_NAME
-
-_Note_: There is a limit to the number of applications you can deploy concurrently to OpenShift. If the `rhc app create` command returns an error indicating you have reached that limit, you must delete an existing application before you continue. 
-
-* To view the list of your OpenShift applications, type: `rhc domain show`
-* To delete an application from OpenShift, type the following, substituting the application name you want to delete: `rhc app-delete -a APPLICATION_NAME_TO_DELETE`
-
-
-Optional Components
--------------------
-The following components are needed for only a small subset of the quickstarts. Do not install or configure them unless the quickstart requires it.
-
-* [Create Users Required by the Quickstarts](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/CREATE_USERS.md#create-users-required-by-the-quickstarts): Add a Management or Application user for the quickstarts that run in a secured mode.
-
-
+    mvn dependency:sources
+    mvn dependency:resolve -Dclassifier=javadoc
