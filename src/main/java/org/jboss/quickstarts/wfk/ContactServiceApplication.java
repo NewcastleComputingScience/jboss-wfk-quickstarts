@@ -32,7 +32,7 @@ import java.util.Set;
 /**
  * A class extending {@link Application} and annotated with @ApplicationPath is the Java EE 6 "no XML" approach to activating
  * JAX-RS.
- * 
+ *
  * <p>
  * Resources are served relative to the servlet path specified in the {@link ApplicationPath} annotation.
  * </p>
@@ -48,6 +48,8 @@ public class ContactServiceApplication extends Application {
         //Modify when you deploy to Openshift
         beanConfig.setHost("localhost:8080/jboss-contacts-swagger");
         beanConfig.setBasePath("/api");
+        beanConfig.setTitle("JBoss Contacts Swagger");
+        beanConfig.setDescription("JBoss WFK Contacts Swagger Quickstart");
         //Add additional RESTService containing packages here, separated by commas:
         // "org.jboss.quickstarts.wfk.contact, org.jboss.quickstarts.wfk.other"
         beanConfig.setResourcePackage("org.jboss.quickstarts.wfk.contact");
@@ -79,5 +81,5 @@ public class ContactServiceApplication extends Application {
         return singletons;
     }
 
-    
+
 }
