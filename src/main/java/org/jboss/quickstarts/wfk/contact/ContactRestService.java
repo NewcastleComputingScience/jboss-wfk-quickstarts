@@ -293,7 +293,7 @@ public class ContactRestService {
             // Apply the changes the Contact.
             service.update(contact);
 
-            // Create an OK Response and pass the ccontact back in case it is needed.
+            // Create an OK Response and pass the contact back in case it is needed.
             builder = Response.ok(contact);
 
 

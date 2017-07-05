@@ -19,15 +19,16 @@ package org.jboss.quickstarts.wfk.contact;
 import org.jboss.quickstarts.wfk.area.Area;
 import org.jboss.quickstarts.wfk.area.AreaService;
 import org.jboss.quickstarts.wfk.area.InvalidAreaCodeException;
-import org.jboss.resteasy.client.ClientResponse;
-import org.jboss.resteasy.client.ClientResponseFailure;
-import org.jboss.resteasy.client.ProxyFactory;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.logging.Logger;
@@ -58,6 +59,17 @@ public class ContactService {
 
     @Inject
     private ContactRepository crud;
+
+    private ResteasyClient client;
+
+
+    /**
+     * <p>Create a new client which will be used for our outgoing REST client communication</p>
+     */
+    public ContactService() {
+        // Create client service instance to make REST requests to upstream service
+        client = new ResteasyClientBuilder().build();
+    }
 
     /**
      * <p>Returns a List of all persisted {@link Contact} objects, sorted alphabetically by last name.<p/>
@@ -126,15 +138,14 @@ public class ContactService {
         validator.validateContact(contact);
 
         //Create client service instance to make REST requests to upstream service
-        AreaService service = ProxyFactory.create(AreaService.class, "http://states-100937864.rhcloud.com");
-
-        ClientResponse<Area> response = service.getAreaById(Integer.parseInt(contact.getPhoneNumber().substring(1, 4)));
+        ResteasyWebTarget target = client.target("http://states-100937864.rhcloud.com");
+        AreaService service = target.proxy(AreaService.class);
 
         try {
-            Area area = response.getEntity();
+            Area area = service.getAreaById(Integer.parseInt(contact.getPhoneNumber().substring(1, 4)));
             contact.setState(area.getState());
-        } catch (ClientResponseFailure e) {
-            if(e.getResponse().getResponseStatus() == Response.Status.NOT_FOUND) {
+        } catch (ClientErrorException e) {
+            if(e.getResponse().getStatusInfo() == Response.Status.NOT_FOUND) {
                 throw new InvalidAreaCodeException("The area code provided does not exist", e);
             } else {
                 throw e;
@@ -160,16 +171,15 @@ public class ContactService {
         // Check to make sure the data fits with the parameters in the Contact model and passes validation.
         validator.validateContact(contact);
 
-        //Create client service instance to make REST requests to upstream service
-        AreaService service = ProxyFactory.create(AreaService.class, "http://states-100937864.rhcloud.com");
-
-        ClientResponse<Area> response = service.getAreaById(Integer.parseInt(contact.getPhoneNumber().substring(1, 4)));
+        // Set client target location and define the proxy API class
+        ResteasyWebTarget target = client.target("http://states-100937864.rhcloud.com");
+        AreaService service = target.proxy(AreaService.class);
 
         try {
-            Area area = response.getEntity();
+            Area area = service.getAreaById(Integer.parseInt(contact.getPhoneNumber().substring(1, 4)));
             contact.setState(area.getState());
-        } catch (ClientResponseFailure e) {
-            if(e.getResponse().getResponseStatus() == Response.Status.NOT_FOUND) {
+        } catch (ClientErrorException e) {
+            if (e.getResponse().getStatusInfo() == Response.Status.NOT_FOUND) {
                 throw new InvalidAreaCodeException("The area code provided does not exist", e);
             } else {
                 throw e;

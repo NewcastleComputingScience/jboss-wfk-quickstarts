@@ -37,9 +37,10 @@ import java.util.List;
 public interface AreaService {
 
     @GET
-    ClientResponse<List<Area>> getAreas();
+    List<Area> getAreas();
+
 
     @GET
     @Path("/{id:[0-9]+}")
-    ClientResponse<Area> getAreaById(@PathParam("id") int id);
+    Area getAreaById(@PathParam("id") int id);
 }
