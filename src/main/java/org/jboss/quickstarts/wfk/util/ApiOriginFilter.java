@@ -16,11 +16,10 @@
  */
 package org.jboss.quickstarts.wfk.util;
 
-import java.io.IOException;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * <p>This filter adds response headers allowing for Cross-Origin Resource Sharing (CORS).</p>

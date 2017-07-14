@@ -17,7 +17,6 @@
 package org.jboss.quickstarts.wfk.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -25,6 +24,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.logging.Logger;
+
 
 /**
  * This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans

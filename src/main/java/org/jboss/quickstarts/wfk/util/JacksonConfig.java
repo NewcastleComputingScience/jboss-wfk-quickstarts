@@ -16,17 +16,13 @@
  */
 package org.jboss.quickstarts.wfk.util;
 
-//import org.codehaus.jackson.map.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 import java.text.SimpleDateFormat;
-import java.util.logging.Logger;
 
 /**
  * <p>This is a config class that effects the Jackson library used to translate the data over the REST endpoint.</p>
