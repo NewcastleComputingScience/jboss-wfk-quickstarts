@@ -27,6 +27,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * <p>This is a the Domain object. The Contact class represents how contact resources are represented in the application
@@ -157,6 +158,6 @@ public class Contact implements Serializable {
 
     @Override
     public int hashCode() {
-        return email.hashCode();
+        return Objects.hashCode(email);
     }
 }
