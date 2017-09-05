@@ -45,8 +45,8 @@ public class ContactServiceApplication extends Application {
         BeanConfig beanConfig = new BeanConfig();
         beanConfig.setVersion("0.1.0");
         beanConfig.setSchemes(new String[]{"http"});
-        //Modify when you deploy to Openshift
-        beanConfig.setHost("localhost:8080/jboss-contacts-swagger");
+        // We may no longer need to change this
+        // beanConfig.setHost("localhost:8080/jboss-contacts-swagger");
         beanConfig.setBasePath("/api");
         beanConfig.setTitle("JBoss Contacts Swagger");
         beanConfig.setDescription("JBoss WFK Contacts Swagger Quickstart");
