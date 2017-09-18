@@ -55,7 +55,7 @@ Start the JBoss EAP Server
 
 _This section applies to **all students**!_
 
-####If you are on your own machine
+#### If you are on your own machine
 
 1. Open a command line and navigate to the root of the JBoss EAP directory.
 2. The following shows the command line to start the server with the default profile:
@@ -71,7 +71,7 @@ _This section applies to **all students**!_
         For Linux:   EAP_HOME/bin/standalone.sh -b 0.0.0.0
         For Windows: EAP_HOME\bin\standalone.bat -b 0.0.0.0
 
-####If you are on a university machine
+#### If you are on a university machine
 
 Open the **CS Portable Apps** menu in the System tray and select the following:
 
