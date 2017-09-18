@@ -193,13 +193,7 @@
             </exclusions>
         </dependency>
 
-        <!-- Deprecated version of Jackson. May still be required, see jboss-deployment-structure.xml -->
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.resteasy</groupId>-->
-            <!--<artifactId>resteasy-jackson-provider</artifactId>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-
+        <!-- We need the resteasy client to communicate with upstream rest services  -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-client</artifactId>
@@ -214,7 +208,7 @@
 
         <!-- Now we declare any tools needed -->
 
-        <!-- Annotation processor to generate the JPA 2.0 metamodel classes for typesafe criteria queries -->
+        <!-- Annotation processor to generate the JPA 2.1 metamodel classes for typesafe criteria queries -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
@@ -233,9 +227,6 @@
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jaxrs</artifactId>
             <version>1.5.15</version>
-            <!-- Most recent version of swagger that does not create warning messages as a result of
-            @ApiParam allowableValues containing infinity even though supported, see -
-            https://git.io/vQerp -->
         </dependency>
 
         <dependency>
