@@ -122,7 +122,7 @@ Deploying to OpenShift
 
 _This section applies to **all students**!_
 
-You can also deploy the application directly to OpenShift, Red Hat's cloud based PaaS offering, follow the instructions [here](https://github.com/NewcastleComputingScience/jboss-wfk-quickstarts/tree/v2.7.0%2BNCL201617-RC1#build-and-deploy-the-quickstart---to-openshift) **UPDATE THIS LINK
+You can also deploy the application directly to OpenShift, Red Hat's cloud based PaaS offering, follow the instructions [here](https://github.com/NewcastleComputingScience/enterprise-middleware-coursework/blob/master/tutorial.asciidoc#openshift)
 
 
 Run the Arquillian tests (CURRENTLY OUT OF ACTION)
