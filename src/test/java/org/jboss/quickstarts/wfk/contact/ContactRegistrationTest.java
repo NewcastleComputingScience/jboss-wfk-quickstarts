@@ -16,12 +16,6 @@
  */
 package org.jboss.quickstarts.wfk.contact;
 
-import java.io.File;
-import java.util.Date;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.Response;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
@@ -33,6 +27,13 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.core.Response;
+import java.io.File;
+import java.util.Date;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
@@ -58,22 +59,21 @@ public class ContactRegistrationTest {
      */
     @Deployment
     public static Archive<?> createTestArchive() {
-        //HttpComponents and org.JSON are required by ContactService
-        File[] libs = Maven.resolver().loadPomFromFile("pom.xml").resolve(
-                "org.codehaus.jackson:jackson-core-asl:1.9.9",
-                "org.codehaus.jackson:jackson-mapper-asl:1.9.9",
-                "org.codehaus.jackson:jackson-jaxrs:1.9.9"
+        // This is currently not well tested. If you run into issues, comment line 67 (the contents of 'resolve') and
+        // uncomment 65. This will build our war with all dependencies instead.
+        File[] libs = Maven.resolver().loadPomFromFile("pom.xml")
+//                .importRuntimeAndTestDependencies()
+                .resolve(
+                        "io.swagger:swagger-jaxrs:1.5.15"
         ).withTransitivity().asFile();
 
-        Archive<?> archive = ShrinkWrap
+        return ShrinkWrap
                 .create(WebArchive.class, "test.war")
                 .addPackages(true, "org.jboss.quickstarts.wfk")
                 .addAsLibraries(libs)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource("arquillian-ds.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-
-        return archive;
     }
 
     @Inject
@@ -155,4 +155,5 @@ public class ContactRegistrationTest {
         contact.setBirthDate(birthDate);
         return contact;
     }
+
 }
