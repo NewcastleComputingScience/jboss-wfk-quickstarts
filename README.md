@@ -125,7 +125,7 @@ _This section applies to **all students**!_
 You can also deploy the application directly to OpenShift, Red Hat's cloud based PaaS offering, follow the instructions [here](https://github.com/NewcastleComputingScience/enterprise-middleware-coursework/blob/master/tutorial.asciidoc#openshift)
 
 
-Run the Arquillian tests (CURRENTLY OUT OF ACTION)
+Run the Arquillian tests
 ------------------------
 
 _This section applies to **all students**!_
@@ -134,7 +134,7 @@ By default, tests are configured to be skipped. The reason is that the sample te
 
 To run the test in JBoss, first start the server. Then, execute the following `mvn` command from a `cmd.exe` window in the quickstart directoy:
 
-    mvn clean test -Parq-jbossas-remote
+    mvn clean test -Parq-wildfly-remote
 
 This will run the test goal with the correct configuration activated.
 
