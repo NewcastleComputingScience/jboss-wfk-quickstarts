@@ -82,30 +82,12 @@ public class ContactRestService {
         if(firstname == null && lastname == null) {
             contacts = service.findAllOrderedByName();
         } else if(lastname == null) {
-            try {
                 contacts = service.findAllByFirstName(firstname);
-            } catch(NoResultException e) {
-                // Verify that a contact exists with the firstname. Return 404, if not present.
-                throw new RestServiceException("No Contact with the firstname " + firstname + " was found!",
-                        Response.Status.NOT_FOUND);
-            }
         } else if(firstname == null) {
-            try {
                 contacts = service.findAllByLastName(lastname);
-            } catch(NoResultException e) {
-                // Verify that a contact exists with the firstname. Return 404, if not present.
-                throw new RestServiceException("No Contact with the lastname " + lastname + " was found!",
-                        Response.Status.NOT_FOUND);
-            }
         } else {
-            try {
                 contacts = service.findAllByFirstName(firstname);
                 contacts.retainAll(service.findAllByLastName(lastname));
-            } catch(NoResultException e) {
-                // Verify that a contact exists with the firstname. Return 404, if not present.
-                throw new RestServiceException("No Contact with the name " + firstname + " " + lastname + " was found!",
-                        Response.Status.NOT_FOUND);
-            }
         }
 
         return Response.ok(contacts).build();
@@ -123,7 +105,7 @@ public class ContactRestService {
      */
     @GET
     @Cache
-    @Path("/{email:^.+[%40|@].+$}")
+    @Path("/email/{email:.+[%40|@].+}")
     @ApiOperation(
             value = "Fetch a Contact by Email",
             notes = "Returns a JSON representation of the Contact object with the provided email."
@@ -133,7 +115,7 @@ public class ContactRestService {
             @ApiResponse(code = 404, message = "Contact with email not found")
     })
     public Response retrieveContactsByEmail(
-            @ApiParam(value = "Email of Contact to be fetched", allowableValues = "davey.jones@locker.com, foo@bar.com", required = true)
+            @ApiParam(value = "Email of Contact to be fetched", required = true)
             @PathParam("email")
             String email) {
 
@@ -268,7 +250,7 @@ public class ContactRestService {
             @ApiParam(value = "JSON representation of Contact object to be updated in the database", required = true)
             Contact contact) {
 
-        if (contact == null) {
+        if (contact == null || contact.getId() == null) {
             throw new RestServiceException("Invalid Contact supplied in request body", Response.Status.BAD_REQUEST);
         }
 
@@ -334,7 +316,7 @@ public class ContactRestService {
     @Path("/{id:[0-9]+}")
     @ApiOperation(value = "Delete a Contact from the database")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = ""),
+            @ApiResponse(code = 204, message = "The contact has been successfully deleted"),
             @ApiResponse(code = 400, message = "Invalid Contact id supplied"),
             @ApiResponse(code = 404, message = "Contact with id not found"),
             @ApiResponse(code = 500, message = "An unexpected error occurred whilst processing the request")

@@ -118,7 +118,7 @@ public class ContactService {
      * @return The Contacts with the specified lastName
      */
     List<Contact> findAllByLastName(String lastName) {
-        return crud.findAllByFirstName(lastName);
+        return crud.findAllByLastName(lastName);
     }
 
     /**
