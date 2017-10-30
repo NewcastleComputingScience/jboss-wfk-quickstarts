@@ -137,7 +137,7 @@ public class ContactService {
         validator.validateContact(contact);
 
         //Create client service instance to make REST requests to upstream service
-        ResteasyWebTarget target = client.target("http://areas-csc8104-states.7e14.starter-us-west-2.openshiftapps.com");
+        ResteasyWebTarget target = client.target("http://csc8104-areas.eastus.cloudapp.azure.com");
         AreaService service = target.proxy(AreaService.class);
 
         try {
@@ -171,7 +171,7 @@ public class ContactService {
         validator.validateContact(contact);
 
         // Set client target location and define the proxy API class
-        ResteasyWebTarget target = client.target("http://areas-csc8104-states.7e14.starter-us-west-2.openshiftapps.com");
+        ResteasyWebTarget target = client.target("http://csc8104-areas.eastus.cloudapp.azure.com");
         AreaService service = target.proxy(AreaService.class);
 
         try {
