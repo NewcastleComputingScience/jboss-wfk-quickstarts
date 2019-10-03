@@ -75,9 +75,9 @@ _This section applies to **all students**!_
 
 Start the JBoss server in the following way:
 
-	Start -> Programming and Databases -> JBoss 7.0 - start server
+	Start -> JBoss 7.0 - Start server
 
-This will start the JBoss server with the default profile. It will also launch a new `cmd.exe` window containing logging output from the server. You must press enter to continue to confirm configuration is stored on the H drive, and the server will start. Closing this `cmd` window will stop the server.
+This will start the JBoss server with the default profile. It will also launch a new Command Prompt window containing logging output from the server. You must press enter to continue to confirm configuration is stored on the H: drive, and the server will start. Closing this `cmd` window will stop the server.
 
 
 Build and Deploy the Quickstart
