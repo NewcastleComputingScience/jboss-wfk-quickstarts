@@ -78,7 +78,7 @@
         <!-- You can reference property in pom.xml or filtered resources (must enable third-party plugin if using Maven < 2.1) -->
 
         <!-- JBoss dependency versions -->
-      <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>2.0.1.Final</version.wildfly.maven.plugin>
 
         <!-- Define the version of the JBoss BOMs we want to import to specify tested stacks. -->
         <version.jboss.bom.eap>7.0.0.GA</version.jboss.bom.eap>
@@ -89,8 +89,8 @@
         <version.ro.isdc.wro4j>1.8.0</version.ro.isdc.wro4j>
 
         <!-- other plugin versions -->
-        <version.surefire.plugin>2.19</version.surefire.plugin>
-        <version.war.plugin>2.6</version.war.plugin>
+        <version.surefire.plugin>2.22.2</version.surefire.plugin>
+        <version.war.plugin>3.2.3</version.war.plugin>
 
         <!-- maven-compiler-plugin -->
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -178,6 +178,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- The xml bind libraries are no longer included in new Java JDK -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
         <!-- JSR-303 (Bean Validation) Implementation -->
         <!-- Provides portable constraints such as @Email -->
         <!-- Hibernate Validator is shipped in JBoss -->
@@ -221,19 +228,19 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jaxrs</artifactId>
-            <version>1.5.15</version>
+            <version>1.5.16</version>
         </dependency>
 
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>swagger-ui</artifactId>
-            <version>3.0.17</version>
+            <version>3.23.8</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>22.0</version>
+            <version>28.1-jre</version>
         </dependency>
 
 

@@ -64,7 +64,7 @@ public class ContactRegistrationTest {
         File[] libs = Maven.resolver().loadPomFromFile("pom.xml")
 //                .importRuntimeAndTestDependencies()
                 .resolve(
-                        "io.swagger:swagger-jaxrs:1.5.15"
+                        "io.swagger:swagger-jaxrs:1.5.16"
         ).withTransitivity().asFile();
 
         return ShrinkWrap
