@@ -39,10 +39,11 @@ ability to:
 System requirements
 -------------------
 
-The application this project produces is designed to be run on Red Hat JBoss Enterprise Application Platform (JBoss EAP)
-7.0 or later.
+The application this project produces is designed to be run on Red Hat JBoss Enterprise Application Platform (JBoss EAP) 7.0.0.
 
 All you need to build this project is Java 7.0 (Java SDK 1.7) or later, and Maven 3.0 or later.
+
+**NOTE: JBoss EAP 7.0.0 only supports Java versions <= 8.0. Whilst JBoss EAP 7.1.0 supports newer Java versions, this project is mostly untested with this EAP version, and some features may not work.**
 
 An HTML5 compatible browser such as Chrome, Safari 5+, Firefox 5+, or IE 9+ is required to view the Swagger
 documentation.
